@@ -8,6 +8,7 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 import * as actions from '../../store/actions';
+import userService from '../../services/userService';
 
 import './Login.scss';
 
@@ -15,14 +16,15 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            email: undefined,
+            password: undefined,
             hiddenPassword: 'false',
+            errMessage: '',
         };
     }
-    handleOnChangeUsername = (event) => {
+    handleOnChangeEmail = (event) => {
         this.setState({
-            username: event.target.value,
+            email: event.target.value,
         });
     };
     handleOnChangePassword = (event) => {
@@ -30,29 +32,43 @@ class Login extends Component {
             password: event.target.value,
         });
     };
-    handleLogin = (event) => {
-        // console.log('all state: ', this.state);
+
+    handleLogin = async (event) => {
+        this.setState({
+            errMessage: '',
+        });
+        const res = await userService.handleLogin(this.state.email, this.state.password);
+        console.log(res);
+
+        if (res && res.errCode == 0) {
+            this.props.userLoginSuccess(res.user);
+            console.log('login succes');
+        } else {
+            this.setState({
+                errMessage: '! ' + res.message,
+            });
+        }
     };
+
     handleHiddenPassword = () => {
         this.setState({ hiddenPassword: !this.state.hiddenPassword });
     };
-
     render() {
         return (
             <div className="login-background">
-                <div className="login-conteiner">
-                    <div className="login-content">
+                <div className="login-container container">
+                    <div className="login-content row">
                         <div className="col-12 text-center">
                             <span className="text-login">Login</span>
                         </div>
                         <div className="col-12 form-group">
-                            <label>Username</label>
+                            <label>Email</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Type your username"
-                                value={this.state.username}
-                                onChange={(event) => this.handleOnChangeUsername(event)}
+                                placeholder="Type your email"
+                                value={this.state.email}
+                                onChange={(event) => this.handleOnChangeEmail(event)}
                             ></input>
                             <FontAwesomeIcon className="icon-input" icon={faUser} />
                         </div>
@@ -72,7 +88,10 @@ class Login extends Component {
                                 onClick={() => this.handleHiddenPassword()}
                             />
                         </div>
-                        <div className="col-12 text-right forgot-password">
+                        <div className="col-5 text-left ms-4 err-message forgot-password">
+                            <span>{this.state.errMessage || ''}</span>
+                        </div>
+                        <div className="col-6 text-right forgot-password">
                             <span className="forgot-password">Forgot your password?</span>
                         </div>
                         <div className="col-12 text-center">
@@ -103,8 +122,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
+        userLoginFail: () => dispatch(actions.userLoginFail()),
     };
 };
 

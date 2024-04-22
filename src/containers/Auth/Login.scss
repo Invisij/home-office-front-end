@@ -1,5 +1,10 @@
 .login-background {
-    .login-conteiner {
+    user-select: none;
+    background-image: url(../../assets/images/bg-01.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    .login-container {
         width: 100%;
         min-height: 100vh;
         display: flex;
@@ -7,10 +12,6 @@
         justify-content: center;
         align-items: center;
         padding: 15px;
-        background-image: url(../../assets/images/bg-01.jpg);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
     }
     .login-content {
         width: 500px;
@@ -74,6 +75,13 @@
             color: #666666;
             &:hover {
                 color: #a64bf4;
+            }
+        }
+        .err-message {
+            cursor: context-menu;
+            color: #ea4335;
+            &:hover {
+                color: #ea4335;
             }
         }
         .btn-login {
