@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { FormattedMessage } from 'react-intl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -33,19 +32,19 @@ class Login extends Component {
         });
     };
 
-    handleLogin = async (event) => {
+    handleLogin = async () => {
         this.setState({
             errMessage: '',
         });
-        const res = await userService.handleLogin(this.state.email, this.state.password);
-        console.log(res);
+        const response = await userService.handleLogin(this.state.email, this.state.password);
+        console.log(response);
 
-        if (res && res.errCode == 0) {
-            this.props.userLoginSuccess(res.user);
+        if (response && response.errCode === 0) {
+            this.props.userLoginSuccess(response.data);
             console.log('login succes');
         } else {
             this.setState({
-                errMessage: '! ' + res.message,
+                errMessage: '! ' + response.message,
             });
         }
     };
@@ -95,7 +94,7 @@ class Login extends Component {
                             <span className="forgot-password">Forgot your password?</span>
                         </div>
                         <div className="col-12 text-center">
-                            <button className="btn-login" onClick={(event) => this.handleLogin(event)}>
+                            <button className="btn-login" onClick={() => this.handleLogin()}>
                                 Login
                             </button>
                         </div>
