@@ -1,0 +1,52 @@
+.home-container {
+    overflow-y: auto;
+    .home-header {
+        position: fixed;
+        display: block;
+        height: 100px;
+        width: 100%;
+        border: 1px solid transparent;
+        background: #fff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06);
+        .header-menu {
+            height: 50%;
+            display: flex;
+            justify-content: center;
+            .header-menu-item {
+                padding: 0px 14px;
+            }
+        }
+    }
+    .home-body {
+        margin-top: 120px;
+        height: 1000px;
+    }
+    .home-footer {
+        padding: 10px;
+        background-color: #111;
+        color: white;
+        h3 {
+            font-weight: 700;
+        }
+        .footer-social-network {
+            svg {
+                height: 32px;
+                width: 32px;
+                + svg {
+                    margin-left: 14px;
+                }
+            }
+        }
+        .footer-info {
+            position: relative;
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                height: 1px;
+                width: 100%;
+                background-color: white;
+            }
+        }
+    }
+}
