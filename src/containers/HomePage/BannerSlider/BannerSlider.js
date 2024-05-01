@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
 import './BannerSlider.scss';
+
+import slider1 from '../../../assets/banner/slider1.jpg';
+import slider2 from '../../../assets/banner/slider2.jpg';
+import slider3 from '../../../assets/banner/slider3.jpg';
 
 class BannerSlider extends Component {
     constructor(props) {
@@ -24,13 +27,13 @@ class BannerSlider extends Component {
             <div className={'image-slider-container ' + this.props.className}>
                 <Slider {...settings}>
                     <div className="image-slider">
-                        <img src="https://homeoffice.com.vn/images/promo/99/banner-homeoffice.jpg" />
+                        <img src={slider1} />
                     </div>
                     <div className="image-slider">
-                        <img src="https://homeoffice.com.vn/images/promo/99/banner-ghe-van-phong-a1.jpg" />
+                        <img src={slider2} />
                     </div>
                     <div className="image-slider">
-                        <img src="https://homeoffice.com.vn/images/promo/93/banner-nhan-san-xuat-theo-yeu-cau-a2.jpg" />
+                        <img src={slider3} />
                     </div>
                 </Slider>
             </div>

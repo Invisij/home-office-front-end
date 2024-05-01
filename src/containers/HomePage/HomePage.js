@@ -21,6 +21,10 @@ class HomePage extends Component {
                         <span className="banner-image-2" />
                     </div>
                 </div>
+                <div className="section">1</div>
+                <div className="section">2</div>
+                <div className="section">3</div>
+                <div className="section">4</div>
             </div>
         );
     }

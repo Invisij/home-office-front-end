@@ -6,31 +6,29 @@
         height: 600px;
         .banner-slider {
             flex: 1;
-            max-width: 60%;
+            max-width: 61%;
             margin-right: 2%;
-            background-image: url(../../assets/images/slider1.jpg);
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
         }
         .banner-image {
             flex: 1;
-            max-width: 34%;
+            max-width: 40%;
+            border-radius: 10px;
             span {
                 height: 49%;
                 display: block;
                 background-repeat: no-repeat;
                 background-position: center;
                 background-size: contain;
+                border-radius: 20px;
                 + span {
                     margin-top: 3%;
                 }
             }
             .banner-image-1 {
-                background-image: url(../../assets/images/image1.jpg);
+                background-image: url(../../assets/banner/image1.jpg);
             }
             .banner-image-2 {
-                background-image: url(../../assets/images/image2.png);
+                background-image: url(../../assets/banner/image2.png);
             }
         }
     }
