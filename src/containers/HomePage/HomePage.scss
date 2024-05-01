@@ -1,51 +1,36 @@
-.home-container {
-    overflow-y: auto;
-    .home-header {
-        position: fixed;
-        display: block;
-        height: 100px;
-        width: 100%;
-        border: 1px solid transparent;
-        background: #fff;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06);
-        .header-menu {
-            height: 50%;
-            display: flex;
-            justify-content: center;
-            .header-menu-item {
-                padding: 0px 14px;
-            }
+.home-page {
+    margin: 0 200px;
+    .banner {
+        display: flex;
+        flex-wrap: wrap;
+        height: 600px;
+        .banner-slider {
+            flex: 1;
+            max-width: 60%;
+            margin-right: 2%;
+            background-image: url(../../assets/images/slider1.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
         }
-    }
-    .home-body {
-        margin-top: 120px;
-        height: 1000px;
-    }
-    .home-footer {
-        padding: 10px;
-        background-color: #111;
-        color: white;
-        h3 {
-            font-weight: 700;
-        }
-        .footer-social-network {
-            svg {
-                height: 32px;
-                width: 32px;
-                + svg {
-                    margin-left: 14px;
+        .banner-image {
+            flex: 1;
+            max-width: 34%;
+            span {
+                height: 49%;
+                display: block;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                + span {
+                    margin-top: 3%;
                 }
             }
-        }
-        .footer-info {
-            position: relative;
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                height: 1px;
-                width: 100%;
-                background-color: white;
+            .banner-image-1 {
+                background-image: url(../../assets/images/image1.jpg);
+            }
+            .banner-image-2 {
+                background-image: url(../../assets/images/image2.png);
             }
         }
     }

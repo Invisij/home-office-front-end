@@ -1,6 +1,15 @@
 /*
  * General styles
  */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    path {
+        pointer-events: none;
+    }
+}
+
 body,
 html {
     background-image: '#fff';
@@ -10,6 +19,7 @@ html {
     font-size: $base-size - 2px;
     height: 100vh;
     overflow-y: overlay;
+    text-rendering: optimizespeed;
 
     // scroll
     ::-webkit-scrollbar {
@@ -20,7 +30,18 @@ html {
     }
     ::-webkit-scrollbar-thumb {
         border-radius: 4px;
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    button,
+    input,
+    [tabindex] {
+        outline: none;
+        border: none;
+    }
+
+    a[href] {
+        text-decoration: none;
     }
 }
 
