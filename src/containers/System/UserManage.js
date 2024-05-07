@@ -157,7 +157,7 @@ class UserManage extends Component {
                             <th scope="col">First name</th>
                             <th scope="col">Last name</th>
                             <th scope="col">Phone number</th>
-                            <th scope="col">Address</th>
+                            <th scope="col">Billing address</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -167,11 +167,11 @@ class UserManage extends Component {
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
                                     <td>{user.email}</td>
-                                    <td>{user.role}</td>
+                                    <td>{user.roleId}</td>
                                     <td>{user.firstName}</td>
                                     <td>{user.lastName}</td>
                                     <td>{user.phoneNumber}</td>
-                                    <td>{user.address}</td>
+                                    <td>{user.billingAddress}</td>
                                     <td>
                                         <div onClick={() => this.handleUpdateUser(user)} className="icon-action">
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />

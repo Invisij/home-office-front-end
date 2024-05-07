@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import BannerSlider from './BannerSlider/BannerSlider';
+import HomePageCat from './Sections/HomePageCat';
 
 import './HomePage.scss';
 
@@ -21,10 +22,7 @@ class HomePage extends Component {
                         <span className="banner-image-2" />
                     </div>
                 </div>
-                <div className="section">1</div>
-                <div className="section">2</div>
-                <div className="section">3</div>
-                <div className="section">4</div>
+                <HomePageCat />
             </div>
         );
     }

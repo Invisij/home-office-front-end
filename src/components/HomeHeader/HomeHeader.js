@@ -81,7 +81,7 @@ class HomeHeader extends Component {
     render() {
         return (
             <div className="home-header">
-                <a href="" className="header-logo" />
+                <a href="/" className="header-logo" />
                 <div className="header-search">
                     <input className="header-search-input" type="text" placeholder="Tìm kiếm sản phẩm..." />
                     <FontAwesomeIcon className="header-search-icon" icon={faMagnifyingGlass} />

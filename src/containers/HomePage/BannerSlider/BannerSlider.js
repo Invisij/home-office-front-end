@@ -15,25 +15,25 @@ class BannerSlider extends Component {
         super(props);
         this.state = {};
     }
+    settings = {
+        speed: 1000,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        adaptiveHeight: false,
+    };
     render() {
-        const settings = {
-            speed: 1000,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            autoplay: true,
-            adaptiveHeight: false,
-        };
         return (
             <div className={'image-slider-container ' + this.props.className}>
-                <Slider {...settings}>
+                <Slider {...this.settings}>
                     <div className="image-slider">
-                        <img src={slider1} />
+                        <img src={slider1} alt="" />
                     </div>
                     <div className="image-slider">
-                        <img src={slider2} />
+                        <img src={slider2} alt="" />
                     </div>
                     <div className="image-slider">
-                        <img src={slider3} />
+                        <img src={slider3} alt="" />
                     </div>
                 </Slider>
             </div>

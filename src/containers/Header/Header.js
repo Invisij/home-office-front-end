@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions';
 import Navigator from '../../components/Navigator';
-import { userMenu } from './menuApp';
+import { adminMenu } from './menuApp';
 import './Header.scss';
 
 class Header extends Component {
@@ -14,8 +14,9 @@ class Header extends Component {
             <div className="header-container">
                 {/* thanh navigator */}
                 <div className="header-tabs-container">
-                    <Navigator menus={userMenu} />
+                    <Navigator menus={adminMenu} />
                 </div>
+                <div className="header-welcome">Chào mừng, {this.props.userInfo.firstName || ''}</div>
 
                 {/* nút logout */}
                 <div className="btn btn-logout" onClick={processLogout}>
@@ -29,6 +30,7 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.user.isLoggedIn,
+        userInfo: state.user.userInfo,
     };
 };
 

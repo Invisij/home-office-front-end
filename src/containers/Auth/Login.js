@@ -41,7 +41,6 @@ class Login extends Component {
 
         if (response && response.errCode === 0) {
             this.props.userLoginSuccess(response.data);
-            console.log('login succes');
         } else {
             this.setState({
                 errMessage: '! ' + response.message,

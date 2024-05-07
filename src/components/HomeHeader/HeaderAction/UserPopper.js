@@ -17,7 +17,9 @@ class UserPopper extends Component {
                 <a href="/login" className="btn-signin user-btn">
                     Đăng nhập
                 </a>
-                <a className="btn-signup user-btn">Đăng ký</a>
+                <a href="/" className="btn-signup user-btn">
+                    Đăng ký
+                </a>
             </div>
         );
     }

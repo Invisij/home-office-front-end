@@ -20,6 +20,9 @@ const userService = {
     updateUser(data) {
         return axios.put(`/v1/api/update-user`, data);
     },
+    getAllCode(type) {
+        return axios.get(`/v1/api/get-all-code?type=${type || ''}`);
+    },
 };
 
 export default userService;
