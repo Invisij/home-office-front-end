@@ -4,12 +4,34 @@ export const adminMenu = [
         name: 'Người dùng',
         menus: [
             {
-                name: 'Quản trị người dùng API',
+                name: 'Quản lý người dùng',
                 link: '/system/user-manage',
             },
             {
-                name: 'Quản lý người dùng redux',
-                link: '/system/user-redux',
+                name: 'Tạo người dùng',
+                link: '/system/user-create',
+            },
+        ],
+    },
+    {
+        //Quản lý người dùng
+        name: 'Danh mục',
+        menus: [
+            {
+                name: 'Quản lý danh mục chính',
+                link: '/system/main-cat-manage',
+            },
+            {
+                name: 'Tạo danh mục chính',
+                link: '/system/main-cat-create',
+            },
+            {
+                name: 'Quản lý danh mục phụ',
+                link: '/system/sub-cat-manage',
+            },
+            {
+                name: 'Tạo danh mục phụ',
+                link: '/system/sub-cat-create',
             },
         ],
     },
@@ -18,8 +40,12 @@ export const adminMenu = [
         name: 'Sản phẩm',
         menus: [
             {
-                name: 'Quản trị sản phẩm',
+                name: 'Quản lý sản phẩm',
                 link: '/system/product-manage',
+            },
+            {
+                name: 'Tạo sản phẩm',
+                link: '/system/product-create',
             },
         ],
     },

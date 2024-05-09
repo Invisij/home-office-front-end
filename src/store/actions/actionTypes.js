@@ -7,7 +7,13 @@ const actionTypes = Object.freeze({
     USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
     USER_LOGIN_FAIL: 'USER_LOGIN_FAIL',
     PROCESS_LOGOUT: 'PROCESS_LOGOUT',
+
     ADD_USER_SUCCESS: 'ADD_USER_SUCCESS',
+
+    //admin
+    GET_ROLE_START: 'GET_ROLE_START',
+    GET_ROLE_SUCCESS: 'GET_ROLE_SUCCESS',
+    GET_ROLE_FAILED: 'GET_ROLE_FAILED',
 });
 
 export default actionTypes;

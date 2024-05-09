@@ -12,8 +12,6 @@ import Home from '../routes/Home';
 import Login from './Auth/Login';
 import System from '../routes/System';
 
-import { CustomToastCloseButton } from '../components/CustomToast';
-
 class App extends Component {
     handlePersistorState = () => {
         const { persistor } = this.props;
@@ -46,16 +44,17 @@ class App extends Component {
                             </Switch>
                         </span>
                         <ToastContainer
-                            className="toast-container"
-                            toastClassName="toast-item"
-                            bodyClassName="toast-item-body"
-                            autoClose={false}
-                            hideProgressBar={true}
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss={false}
+                            draggable
                             pauseOnHover={false}
-                            pauseOnFocusLoss={true}
-                            closeOnClick={false}
-                            draggable={false}
-                            closeButton={<CustomToastCloseButton />}
+                            theme="colored"
+                            transition="Bounce"
                         />
                     </div>
                 </Router>

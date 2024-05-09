@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
 
-import userService from '../../services/userService';
-import { EmitterUtils } from '../../utils';
-import ModalUser from './ModalUser';
-import ModalUpdateUser from './ModalUpdateUser';
+import userService from '../../../../services/userService';
 
 import './UserManage.scss';
 
@@ -15,15 +12,13 @@ class UserManage extends Component {
         super(props);
         this.state = {
             arrUser: [],
-            isOpenModalUser: false,
-            isOpenModalUpdateUser: false,
-            UpdateUser: {},
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.readUser();
     }
+
     readUser = async () => {
         const response = await userService.getUser();
         if (response && response.errCode === 0) {
@@ -42,28 +37,15 @@ class UserManage extends Component {
         }
     };
 
-    toggleModalUser = () => {
-        this.setState({
-            isOpenModalUser: !this.state.isOpenModalUser,
-        });
-    };
-    toggleModalUpdateUser = () => {
-        this.setState({
-            isOpenModalUpdateUser: !this.state.isOpenModalUpdateUser,
-        });
+    handleCreateUser = () => {
+        this.props.history.push('/system/user-create');
     };
 
-    createNewUser = async (data) => {
-        const response = await userService.createUser(data);
-        if (response && response.errCode === 0) {
-            this.readUser();
-            this.setState({
-                isOpenModalUser: !this.state.isOpenModalUser,
-            });
-            EmitterUtils.emit(`clear modal data`);
-        } else {
-            alert(response.message);
-        }
+    handleUpdateUser = (user) => {
+        this.props.history.push({
+            pathname: '/system/user-update',
+            user,
+        });
     };
 
     handleDeleteUser = async (user) => {
@@ -74,51 +56,11 @@ class UserManage extends Component {
             alert(response.message);
         }
     };
-    handleUpdateUser = async (user) => {
-        this.setState({
-            isOpenModalUpdateUser: !this.state.isOpenModalUpdateUser,
-            UpdateUser: user,
-        });
-    };
-    UpdateUser = async (user) => {
-        const response = await userService.updateUser(user);
-        if (response && response.errCode === 0) {
-            this.readUser();
-            this.setState({
-                isOpenModalUpdateUser: !this.state.isOpenModalUpdateUser,
-            });
-        } else {
-            alert(response.message);
-        }
-    };
 
     render() {
         return (
             <div className="user-container container mt-5">
-                <ModalUser
-                    isOpen={this.state.isOpenModalUser}
-                    toggleFromParent={this.toggleModalUser}
-                    createNewUser={this.createNewUser}
-                    className="modal-container-user"
-                    size="xl"
-                    backdrop={true}
-                    fade={true}
-                    centered={true}
-                />
-                {this.state.isOpenModalUpdateUser && (
-                    <ModalUpdateUser
-                        isOpen={this.state.isOpenModalUpdateUser}
-                        toggleFromParent={this.toggleModalUpdateUser}
-                        currentUser={this.state.UpdateUser}
-                        UpdateUser={this.UpdateUser}
-                        className="modal-container-user"
-                        size="xl"
-                        backdrop={true}
-                        fade={true}
-                        centered={true}
-                    />
-                )}
-                <div className="title text-center mb-5">Manage users</div>
+                <div className="title text-center mb-5">Quản lý người dùng</div>
                 <div className="row">
                     <div className="col-2">
                         <div className="input-group mb-3">
@@ -130,21 +72,21 @@ class UserManage extends Component {
                                     type="text"
                                     className="form-control input-name"
                                     name="firstName"
-                                    placeholder="Username"
+                                    placeholder="Tên người dùng..."
                                     onChange={(event) => this.handleName(event)}
                                 />
-                                <label htmlFor="firstName">Username</label>
+                                <label htmlFor="firstName">Tên người dùng</label>
                             </div>
                         </div>
                     </div>
-                    <div className="col-8"></div>
-                    <div className="col-2 text-right text mt-1">
+                    <div className="col-7"></div>
+                    <div className="col-3 text-right text mt-1">
                         <button
                             type="button"
                             className="btn btn-primary btn-lg button-text"
-                            onClick={() => this.toggleModalUser()}
+                            onClick={() => this.handleCreateUser()}
                         >
-                            Create new user
+                            Tạo người dùng mới
                         </button>
                     </div>
                 </div>
