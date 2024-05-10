@@ -53,8 +53,6 @@ class App extends Component {
                             pauseOnFocusLoss={false}
                             draggable
                             pauseOnHover={false}
-                            theme="colored"
-                            transition="Bounce"
                         />
                     </div>
                 </Router>

@@ -1,1 +1,11 @@
-
+.user-update-container {
+    .user-update-body {
+        .btn-back {
+            font-size: 1.3rem;
+            cursor: pointer;
+            &:hover {
+                color: #0071ba;
+            }
+        }
+    }
+}

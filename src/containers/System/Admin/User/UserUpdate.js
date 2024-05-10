@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 import userService from '../../../../services/userService';
 import * as action from '../../../../store/actions';
@@ -10,9 +12,16 @@ import './UserUpdate.scss';
 class UserUpdate extends Component {
     constructor(props) {
         super(props);
+        const { id, email, roleId, firstName, lastName, phoneNumber, billingAddress } = this.props.location.state.user;
         this.state = {
             roleArr: [],
-            user: this.props.location.user,
+            id,
+            email,
+            roleId,
+            firstName,
+            lastName,
+            phoneNumber,
+            billingAddress,
         };
     }
 
@@ -24,13 +33,12 @@ class UserUpdate extends Component {
         if (prevProps.roleArr !== this.props.roleArr) {
             this.setState({
                 roleArr: this.props.roleArr,
-                roleId: this.props.roleArr[2].key,
             });
         }
     }
 
     onChangeInput = (event, type) => {
-        let copyState = { ...this.state.user };
+        let copyState = { ...this.state };
         copyState[type] = event.target.value;
         this.setState({
             ...copyState,
@@ -39,14 +47,13 @@ class UserUpdate extends Component {
 
     handleUpdateUser = async () => {
         const response = await userService.updateUser({
-            id: this.state.user.id,
-            roleId: this.state.user.roleId,
-            firstName: this.state.user.firstName,
-            lastName: this.state.user.lastName,
-            phoneNumber: this.state.user.phoneNumber,
-            billingAddress: this.state.user.billingAddress,
+            id: this.state.id,
+            roleId: this.state.roleId,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            phoneNumber: this.state.phoneNumber,
+            billingAddress: this.state.billingAddress,
         });
-        console.log(this.props);
         if (response && response.errCode === 0) {
             this.props.history.push('/system/user-manage');
             toast.success('Sửa thông tin thành công');
@@ -55,15 +62,21 @@ class UserUpdate extends Component {
         }
     };
 
+    handleBack = () => {
+        this.props.history.push('/system/user-manage');
+        return;
+    };
+
     render() {
-        if (!this.props.location.user) {
-            this.props.history.push('/system/user-manage');
-        }
         return (
-            <div className="user-redux-container">
+            <div className="user-update-container">
                 <div className="title">Cập nhật thông tin người dùng</div>
-                <div className="user-redux-body mt-5">
+                <div className="user-update-body mt-5">
                     <div className="container">
+                        <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
+                            <FontAwesomeIcon icon={faArrowLeftLong} />
+                            <span className="ms-3">Quay lại</span>
+                        </div>
                         <div className="row">
                             <div className="col-4 mb-3 ">
                                 <label className="form-label">Email</label>
@@ -72,7 +85,7 @@ class UserUpdate extends Component {
                                     type="email"
                                     placeholder="Nhập email..."
                                     onChange={(event) => this.onChangeInput(event, 'email')}
-                                    value={this.state.user.email}
+                                    value={this.state.email}
                                     disabled
                                 />
                             </div>
@@ -80,7 +93,7 @@ class UserUpdate extends Component {
                                 <label className="form-label">Vai trò</label>
                                 <select
                                     className="form-select"
-                                    value={this.state.user.roleId}
+                                    value={this.state.roleId}
                                     onChange={(event) => this.onChangeInput(event, 'roleId')}
                                 >
                                     {this.state.roleArr.map((item) => (
@@ -98,7 +111,7 @@ class UserUpdate extends Component {
                                     className="form-control"
                                     type="text"
                                     placeholder="Nhập họ..."
-                                    value={this.state.user.lastName}
+                                    value={this.state.lastName}
                                     onChange={(event) => this.onChangeInput(event, 'lastName')}
                                 />
                             </div>
@@ -108,7 +121,7 @@ class UserUpdate extends Component {
                                     className="form-control"
                                     type="text"
                                     placeholder="Nhập tên..."
-                                    value={this.state.user.firstName}
+                                    value={this.state.firstName}
                                     onChange={(event) => this.onChangeInput(event, 'firstName')}
                                 />
                             </div>
@@ -119,7 +132,7 @@ class UserUpdate extends Component {
                                     className="form-control"
                                     type="text"
                                     placeholder="Nhập điện thoại..."
-                                    value={this.state.user.phoneNumber}
+                                    value={this.state.phoneNumber}
                                     onChange={(event) => this.onChangeInput(event, 'phoneNumber')}
                                 />
                             </div>
@@ -130,7 +143,7 @@ class UserUpdate extends Component {
                                     className="form-control"
                                     type="text"
                                     placeholder="Nhập địa chỉ..."
-                                    value={this.state.user.billingAddress}
+                                    value={this.state.billingAddress}
                                     onChange={(event) => this.onChangeInput(event, 'billingAddress')}
                                 />
                             </div>

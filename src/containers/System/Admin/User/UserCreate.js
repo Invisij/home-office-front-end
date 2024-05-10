@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 import userService from '../../../../services/userService';
 import * as action from '../../../../store/actions';
@@ -77,12 +79,20 @@ class UserCreate extends Component {
         }
     };
 
+    handleBack = () => {
+        this.props.history.push('/system/user-manage');
+    };
+
     render() {
         return (
-            <div className="user-redux-container">
+            <div className="user-create-container">
                 <div className="title">Tạo người dùng</div>
-                <div className="user-redux-body mt-5">
+                <div className="user-create-body">
                     <div className="container">
+                        <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
+                            <FontAwesomeIcon icon={faArrowLeftLong} />
+                            <span className="ms-3">Quay lại</span>
+                        </div>
                         <div className="row">
                             <div className="col-4 mb-3 ">
                                 <label className="form-label">Email</label>

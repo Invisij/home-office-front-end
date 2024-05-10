@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
+import { toast } from 'react-toastify';
 
 import userService from '../../../../services/userService';
 
@@ -11,7 +13,7 @@ class UserManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            arrUser: [],
+            userArr: [],
         };
     }
 
@@ -23,7 +25,7 @@ class UserManage extends Component {
         const response = await userService.getUser();
         if (response && response.errCode === 0) {
             this.setState({
-                arrUser: response.data,
+                userArr: response.data,
             });
         }
     };
@@ -32,7 +34,7 @@ class UserManage extends Component {
         const response = await userService.getUser(event.target.value);
         if (response && response.errCode === 0) {
             this.setState({
-                arrUser: response.data,
+                userArr: response.data,
             });
         }
     };
@@ -44,7 +46,7 @@ class UserManage extends Component {
     handleUpdateUser = (user) => {
         this.props.history.push({
             pathname: '/system/user-update',
-            user,
+            state: { user },
         });
     };
 
@@ -52,8 +54,9 @@ class UserManage extends Component {
         const response = await userService.deleteUser(user.id);
         if (response && response.errCode === 0) {
             this.readUser();
+            toast.success('Xóa người dùng thành công');
         } else {
-            alert(response.message);
+            toast.warning('Xóa người dùng thất bại');
         }
     };
 
@@ -104,7 +107,7 @@ class UserManage extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.arrUser.map((user, index) => {
+                        {this.state.userArr.map((user, index) => {
                             return (
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
