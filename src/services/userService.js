@@ -4,7 +4,7 @@ const userService = {
     handleLogin(email, password) {
         return axios.post(`/v1/api/login`, { email, password });
     },
-    getUser(firstName) {
+    readUser(firstName) {
         return axios.get(`/v1/api/read-user?firstName=${firstName || ''}`);
     },
     createUser(data) {

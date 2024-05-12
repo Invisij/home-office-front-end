@@ -29,7 +29,6 @@ class SubCatCreate extends Component {
 
     handleOnChangeImage = (event) => {
         const file = event.target.files[0];
-        console.log(file);
         if (event.target.files[0]) {
             this.setState({
                 previewImgURL: URL.createObjectURL(file),

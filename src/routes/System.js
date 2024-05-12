@@ -7,6 +7,8 @@ import UserManage from '../containers/System/Admin/User/UserManage';
 import UserCreate from '../containers/System/Admin/User/UserCreate';
 import UserUpdate from '../containers/System/Admin/User/UserUpdate';
 import MainCatCreate from '../containers/System/Admin/Category/MainCatCreate';
+import MainCatManage from '../containers/System/Admin/Category/MainCatManage';
+import MainCatUpdate from '../containers/System/Admin/Category/MainCatUpdate';
 import SubCatCreate from '../containers/System/Admin/Category/SubCatCreate';
 import ProductCreate from '../containers/System/Admin/Product/ProductCreate';
 
@@ -24,7 +26,9 @@ class System extends Component {
                         <Route path="/system/user-create" component={UserCreate} />
                         <Route path="/system/user-update" component={UserUpdate} />
                         <Route path="/system/main-cat-create" component={MainCatCreate} />
-                        <Route path="/system/suv-cat-create" component={SubCatCreate} />
+                        <Route path="/system/main-cat-manage" component={MainCatManage} />
+                        <Route path="/system/main-cat-update" component={MainCatUpdate} />
+                        <Route path="/system/sub-cat-create" component={SubCatCreate} />
                         <Route path="/system/product-create" component={ProductCreate} />
 
                         <Route

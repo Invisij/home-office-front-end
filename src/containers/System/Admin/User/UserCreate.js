@@ -70,7 +70,6 @@ class UserCreate extends Component {
             phoneNumber: this.state.phoneNumber,
             billingAddress: this.state.billingAddress,
         });
-        console.log(this.props);
         if (response && response.errCode === 0) {
             this.props.history.push('/system/user-manage');
             toast.success('Thêm người dùng thành công');

@@ -8,16 +8,18 @@ import mainCatService from '../../../../services/mainCatService';
 import * as action from '../../../../store/actions';
 import { CommonUtils } from '../../../../utils';
 
-import './MainCatCreate.scss';
+import './MainCatUpdate.scss';
 
-class MainCatCreate extends Component {
+class MainCatUpdate extends Component {
     constructor(props) {
         super(props);
+        const { id, name, image, description } = this.props.location.state.mainCat;
         this.state = {
             previewImgURL: '',
-            name: '',
-            image: '',
-            description: '',
+            id,
+            name,
+            image,
+            description,
         };
     }
 
@@ -45,17 +47,18 @@ class MainCatCreate extends Component {
             });
         }
     };
-    handleAddMainCat = async () => {
-        const response = await mainCatService.createMainCat({
+    handleUpdateMainCat = async () => {
+        const response = await mainCatService.updateMainCat({
+            id: this.state.id,
             name: this.state.name,
             image: this.state.image,
             description: this.state.description,
         });
         this.props.history.push('/system/main-cat-manage');
         if (response && response.errCode === 0) {
-            toast.success(`Thêm danh mục chính "${this.state.name}" thành công`);
+            toast.success(`Sửa danh mục chính "${this.state.name}" thành công`);
         } else {
-            toast.warning(`Thêm danh mục chính "${this.state.name}" thất bại`);
+            toast.warning(`Sửa danh mục chính "${this.state.name}" thất bại`);
         }
     };
 
@@ -65,9 +68,9 @@ class MainCatCreate extends Component {
 
     render() {
         return (
-            <div className="main-cat-create-container">
-                <div className="title">Tạo danh mục chính</div>
-                <div className="main-cat-create-body mt-5">
+            <div className="main-cat-update-container">
+                <div className="title">Sửa danh mục chính</div>
+                <div className="main-cat-update-body mt-5">
                     <div className="container">
                         <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
                             <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -88,7 +91,7 @@ class MainCatCreate extends Component {
                             <div className="col-4 mb-3">
                                 <label className="form-label">Ảnh</label>
                                 <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''}></img>
+                                    <img src={this.state.previewImgURL || this.state.image}></img>
                                 </div>
                                 <input
                                     className="form-control"
@@ -108,13 +111,13 @@ class MainCatCreate extends Component {
                                 ></textarea>
                             </div>
                             <div className="col-12"></div>
-                            <div className="col-3">
+                            <div className="col-1">
                                 <button
                                     type="submit"
                                     className="btn btn-primary me-3"
-                                    onClick={() => this.handleAddMainCat()}
+                                    onClick={() => this.handleUpdateMainCat()}
                                 >
-                                    Thêm danh mục
+                                    Sửa
                                 </button>
                             </div>
                         </div>
@@ -133,4 +136,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainCatCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(MainCatUpdate);

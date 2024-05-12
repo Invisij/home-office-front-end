@@ -19,30 +19,3 @@
         }
     }
 }
-
-.modal-container-user {
-    .modal-content {
-        // .model-header {
-        //     .modal-title {}
-        // }
-        .modal-body {
-            .modal-body-user {
-                display: flex;
-                gap: 15px;
-                flex-wrap: wrap;
-                .input-container {
-                    width: 49%;
-                    display: flex;
-                    flex-direction: column;
-                    input {
-                        height: 30px;
-                        padding: 0 10px;
-                        border-radius: 3px;
-                        border: 1px solid gainsboro;
-                        outline: none;
-                    }
-                }
-            }
-        }
-    }
-}

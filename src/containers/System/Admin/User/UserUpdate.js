@@ -64,7 +64,6 @@ class UserUpdate extends Component {
 
     handleBack = () => {
         this.props.history.push('/system/user-manage');
-        return;
     };
 
     render() {

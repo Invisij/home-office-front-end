@@ -1,0 +1,27 @@
+.main-cat-manage-container {
+    img {
+        height: 30px;
+        width: auto;
+    }
+    .button-text {
+        height: 70%;
+        width: 100%;
+    }
+    .icon-action {
+        display: inline-flex;
+        padding: 0 8px;
+        cursor: pointer;
+        .icon-edit {
+            color: yellowgreen;
+        }
+        .icon-delete {
+            color: red;
+        }
+        svg {
+            height: 24px;
+            &:hover {
+                color: black;
+            }
+        }
+    }
+}
