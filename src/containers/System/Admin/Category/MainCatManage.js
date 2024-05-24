@@ -117,7 +117,7 @@ class MainCatManage extends Component {
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
                                     <td>{mainCat.name}</td>
-                                    <td>{mainCat.image && <img src={mainCat.image} alt="Đây là ảnh danh mục" />}</td>
+                                    <td>{mainCat.image && <img src={mainCat.image} alt="Ảnh danh mục chính" />}</td>
                                     <td className="description">{mainCat.description}</td>
                                     <td>
                                         <div onClick={() => this.handleUpdateMainCat(mainCat)} className="icon-action">

@@ -115,7 +115,7 @@ class SubCatCreate extends Component {
                             <div className="col-4 mb-3">
                                 <label className="form-label">Ảnh</label>
                                 <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''}></img>
+                                    <img src={this.state.previewImgURL || ''} alt="Ảnh danh mục phụ" />
                                 </div>
                                 <input
                                     className="form-control"

@@ -9,9 +9,9 @@ import subCatService from '../../../../services/subCatService';
 import discountService from '../../../../services/discountService';
 import { CommonUtils } from '../../../../utils';
 
-import './ProductCreate.scss';
+import './ProductUpdate.scss';
 
-class ProductCreate extends Component {
+class ProductUpdate extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,6 +33,7 @@ class ProductCreate extends Component {
     componentDidMount() {
         this.fetchSubCats();
         this.fetchDiscounts();
+        this.loadProductDetails();
     }
 
     fetchSubCats = async () => {
@@ -52,6 +53,38 @@ class ProductCreate extends Component {
                 discountArr: response.data,
                 discountId: response.data[0].id,
             });
+        }
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {}
+
+    loadProductDetails = async () => {
+        const productId = this.props.match.params.id;
+        if (productId) {
+            const response = await productService.readProductById(productId);
+            if (response && response.errCode === 0) {
+                response.data.forEach((item) => {
+                    if (item.image) {
+                        item.image = Buffer.from(item.image, 'base64').toString('binary');
+                    }
+                });
+                const product = response.data[0];
+                this.setState({
+                    id: product.id,
+                    subCatId: product.subCatId,
+                    discountId: product.discountId,
+                    name: product.name,
+                    price: product.price,
+                    sku: product.sku,
+                    image: product.image,
+                    status: product.status,
+                    quantity: product.quantity,
+                    description: product.description,
+                });
+            } else {
+                toast.warning('Không tìm thấy sản phẩm');
+                this.props.history.push('/system/product-manage');
+            }
         }
     };
 
@@ -75,8 +108,9 @@ class ProductCreate extends Component {
             });
         }
     };
-    handleAddProduct = async () => {
-        const response = await productService.createProduct({
+    handleUpdateProduct = async () => {
+        const response = await productService.updateProduct({
+            id: this.state.id,
             subCatId: this.state.subCatId,
             discountId: this.state.discountId,
             name: this.state.name,
@@ -89,9 +123,9 @@ class ProductCreate extends Component {
         });
         this.props.history.push('/system/product-manage');
         if (response && response.errCode === 0) {
-            toast.success(`Thêm sản phẩm "${this.state.name}" thành công`);
+            toast.success(`Sửa sản phẩm "${this.state.name}" thành công`);
         } else {
-            toast.warning(`Thêm sản phẩm "${this.state.name}" thất bại`);
+            toast.warning(`Sửa sản phẩm "${this.state.name}" thất bại`);
         }
     };
 
@@ -101,9 +135,9 @@ class ProductCreate extends Component {
 
     render() {
         return (
-            <div className="product-create-container">
-                <div className="title">Tạo sản phẩm</div>
-                <div className="product-create-body mt-5">
+            <div className="product-update-container">
+                <div className="title">Sửa sản phẩm</div>
+                <div className="product-update-body mt-5">
                     <div className="container">
                         <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
                             <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -194,7 +228,7 @@ class ProductCreate extends Component {
                             <div className="col-4 mb-3">
                                 <label className="form-label">Ảnh</label>
                                 <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''} alt="Ảnh sản phẩm" />
+                                    <img src={this.state.previewImgURL || this.state.image} alt="Ảnh sản phẩm" />
                                 </div>
                                 <input
                                     className="form-control"
@@ -214,13 +248,13 @@ class ProductCreate extends Component {
                                 ></textarea>
                             </div>
                             <div className="col-12"></div>
-                            <div className="col-3">
+                            <div className="col-1">
                                 <button
                                     type="submit"
                                     className="btn btn-primary me-3"
-                                    onClick={() => this.handleAddProduct()}
+                                    onClick={() => this.handleUpdateProduct()}
                                 >
-                                    Thêm sản phẩm
+                                    Sửa
                                 </button>
                             </div>
                         </div>
@@ -239,4 +273,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductUpdate);

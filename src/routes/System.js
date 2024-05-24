@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Header from '../containers/Header/Header';
+
 import UserManage from '../containers/System/Admin/User/UserManage';
 import UserCreate from '../containers/System/Admin/User/UserCreate';
 import UserUpdate from '../containers/System/Admin/User/UserUpdate';
@@ -15,7 +16,12 @@ import SubCatUpdate from '../containers/System/Admin/Category/SubCatUpdate';
 import DiscountManage from '../containers/System/Admin/Discount/DiscountManage';
 import DiscountCreate from '../containers/System/Admin/Discount/DiscountCreate';
 import DiscountUpdate from '../containers/System/Admin/Discount/DiscountUpdate';
+import ProductManage from '../containers/System/Admin/Product/ProductManage';
 import ProductCreate from '../containers/System/Admin/Product/ProductCreate';
+import ProductUpdate from '../containers/System/Admin/Product/ProductUpdate';
+import OrderManage from '../containers/System/Admin/Order/OrderManage';
+import OrderCreate from '../containers/System/Admin/Order/OrderCreate';
+import OrderUpdate from '../containers/System/Admin/Order/OrderUpdate';
 
 import './System.scss';
 
@@ -44,6 +50,12 @@ class System extends Component {
                         <Route path="/system/discount-update/:id" component={DiscountUpdate} />
 
                         <Route path="/system/product-create" component={ProductCreate} />
+                        <Route path="/system/product-manage" component={ProductManage} />
+                        <Route path="/system/product-update/:id" component={ProductUpdate} />
+
+                        <Route path="/system/order-create" component={OrderCreate} />
+                        <Route path="/system/order-manage" component={OrderManage} />
+                        <Route path="/system/order-update/:id" component={OrderUpdate} />
 
                         <Route
                             component={() => {

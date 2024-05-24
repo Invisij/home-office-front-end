@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
-import productService from '../../../../services/productService';
+import orderService from '../../../../services/orderService';
 import subCatService from '../../../../services/subCatService';
 import discountService from '../../../../services/discountService';
 import { CommonUtils } from '../../../../utils';
 
-import './ProductCreate.scss';
+import './OrderCreate.scss';
 
-class ProductCreate extends Component {
+class OrderCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -75,8 +75,8 @@ class ProductCreate extends Component {
             });
         }
     };
-    handleAddProduct = async () => {
-        const response = await productService.createProduct({
+    handleAddOrder = async () => {
+        const response = await orderService.createOrder({
             subCatId: this.state.subCatId,
             discountId: this.state.discountId,
             name: this.state.name,
@@ -87,23 +87,23 @@ class ProductCreate extends Component {
             quantity: this.state.quantity,
             description: this.state.description,
         });
-        this.props.history.push('/system/product-manage');
+        this.props.history.push('/system/order-manage');
         if (response && response.errCode === 0) {
-            toast.success(`Thêm sản phẩm "${this.state.name}" thành công`);
+            toast.success(`Thêm đơn hàng "${this.state.name}" thành công`);
         } else {
-            toast.warning(`Thêm sản phẩm "${this.state.name}" thất bại`);
+            toast.warning(`Thêm đơn hàng "${this.state.name}" thất bại`);
         }
     };
 
     handleBack = () => {
-        this.props.history.push('/system/product-manage');
+        this.props.history.push('/system/order-manage');
     };
 
     render() {
         return (
-            <div className="product-create-container">
-                <div className="title">Tạo sản phẩm</div>
-                <div className="product-create-body mt-5">
+            <div className="order-create-container">
+                <div className="title">Tạo đơn hàng</div>
+                <div className="order-create-body mt-5">
                     <div className="container">
                         <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
                             <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -111,11 +111,11 @@ class ProductCreate extends Component {
                         </div>
                         <div className="row">
                             <div className="col-3 mb-3">
-                                <label className="form-label">Tên sản phẩm</label>
+                                <label className="form-label">Tên đơn hàng</label>
                                 <input
                                     className="form-control"
                                     type="text"
-                                    placeholder="Nhập tên sản phẩm..."
+                                    placeholder="Nhập tên đơn hàng..."
                                     onChange={(event) => this.onChangeInput(event, 'name')}
                                     value={this.state.name}
                                 />
@@ -194,7 +194,7 @@ class ProductCreate extends Component {
                             <div className="col-4 mb-3">
                                 <label className="form-label">Ảnh</label>
                                 <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''} alt="Ảnh sản phẩm" />
+                                    <img src={this.state.previewImgURL || ''} alt="Ảnh đơn hàng" />
                                 </div>
                                 <input
                                     className="form-control"
@@ -218,9 +218,9 @@ class ProductCreate extends Component {
                                 <button
                                     type="submit"
                                     className="btn btn-primary me-3"
-                                    onClick={() => this.handleAddProduct()}
+                                    onClick={() => this.handleAddOrder()}
                                 >
-                                    Thêm sản phẩm
+                                    Thêm đơn hàng
                                 </button>
                             </div>
                         </div>
@@ -239,4 +239,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderCreate);

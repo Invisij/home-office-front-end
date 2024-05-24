@@ -4,24 +4,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
-import subCatService from '../../../../services/subCatService';
+import productService from '../../../../services/productService';
 
-import './SubCatManage.scss';
+import './ProductManage.scss';
 
-class SubCatManage extends Component {
+class ProductManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            subCatArr: [],
+            productArr: [],
         };
     }
 
     componentDidMount() {
-        this.readSubCat();
+        this.readProduct();
     }
 
-    readSubCat = async () => {
-        const response = await subCatService.readSubCat();
+    readProduct = async () => {
+        const response = await productService.readProduct();
         if (response && response.errCode === 0) {
             response.data.forEach((item) => {
                 if (item.image) {
@@ -29,13 +29,13 @@ class SubCatManage extends Component {
                 }
             });
             this.setState({
-                subCatArr: response.data,
+                productArr: response.data,
             });
         }
     };
 
     handleName = async (event) => {
-        const response = await subCatService.readSubCat(event.target.value);
+        const response = await productService.readProduct(event.target.value);
         if (response && response.errCode === 0) {
             response.data.forEach((item) => {
                 if (item.image) {
@@ -43,35 +43,35 @@ class SubCatManage extends Component {
                 }
             });
             this.setState({
-                subCatArr: response.data,
+                productArr: response.data,
             });
         }
     };
 
-    handleCreateSubCat = () => {
-        this.props.history.push('/system/sub-cat-create');
+    handleCreateProduct = () => {
+        this.props.history.push('/system/product-create');
     };
 
-    handleUpdateSubCat = (subCat) => {
+    handleUpdateProduct = (product) => {
         this.props.history.push({
-            pathname: `/system/sub-cat-update/${subCat.id}`,
+            pathname: `/system/product-update/${product.id}`,
         });
     };
 
-    handleDeleteSubCat = async (subCat) => {
-        const response = await subCatService.deleteSubCat(subCat.id);
+    handleDeleteProduct = async (product) => {
+        const response = await productService.deleteProduct(product.id);
         if (response && response.errCode === 0) {
-            this.readSubCat();
-            toast.success(`Xóa danh mục phụ "${subCat.name}" thành công`);
+            this.readProduct();
+            toast.success(`Xóa sản phẩm "${product.name}" thành công`);
         } else {
-            toast.warning(`Xóa danh mục phụ "${subCat.name}" thất bại`);
+            toast.warning(`Xóa sản phẩm "${product.name}" thất bại`);
         }
     };
 
     render() {
         return (
-            <div className="sub-cat-manage-container container mt-5">
-                <div className="title text-center mb-5">Quản lý danh mục phụ</div>
+            <div className="product-manage-container container mt-5">
+                <div className="title text-center mb-5">Quản lý sản phẩm</div>
                 <div className="row">
                     <div className="col-2">
                         <div className="input-group mb-3">
@@ -83,10 +83,10 @@ class SubCatManage extends Component {
                                     type="text"
                                     className="form-control input-name"
                                     name="name"
-                                    placeholder="Tên danh mục phụ..."
+                                    placeholder="Tên sản phẩm..."
                                     onChange={(event) => this.handleName(event)}
                                 />
-                                <label htmlFor="name">Tên danh mục phụ</label>
+                                <label htmlFor="name">Tên sản phẩm</label>
                             </div>
                         </div>
                     </div>
@@ -95,9 +95,9 @@ class SubCatManage extends Component {
                         <button
                             type="button"
                             className="btn btn-primary btn-lg button-text"
-                            onClick={() => this.handleCreateSubCat()}
+                            onClick={() => this.handleCreateProduct()}
                         >
-                            Tạo danh mục phụ mới
+                            Tạo sản phẩm mới
                         </button>
                     </div>
                 </div>
@@ -106,26 +106,30 @@ class SubCatManage extends Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tên</th>
-                            <th scope="col">Loại danh mục chính</th>
+                            <th scope="col">Loại sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Số lượng</th>
                             <th scope="col">Ảnh</th>
-                            <th scope="col">Mô tả</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.subCatArr.map((subCat, index) => {
+                        {this.state.productArr.map((product, index) => {
                             return (
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{subCat.name}</td>
-                                    <td>{subCat.mainCatId}</td>
-                                    <td>{subCat.image && <img src={subCat.image} alt="Ảnh danh mục phụ" />}</td>
-                                    <td className="description">{subCat.description}</td>
+                                    <td>{product.name}</td>
+                                    <td>{product.subCatId}</td>
+                                    <td>{product.price}</td>
+                                    <td>{product.status}</td>
+                                    <td>{product.quantity}</td>
+                                    <td>{product.image && <img src={product.image} alt="Ảnh sản phẩm" />}</td>
                                     <td>
-                                        <div onClick={() => this.handleUpdateSubCat(subCat)} className="icon-action">
+                                        <div onClick={() => this.handleUpdateProduct(product)} className="icon-action">
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />
                                         </div>
-                                        <div onClick={() => this.handleDeleteSubCat(subCat)} className="icon-action">
+                                        <div onClick={() => this.handleDeleteProduct(product)} className="icon-action">
                                             <FontAwesomeIcon className="icon-delete" icon={faTrashCan} />
                                         </div>
                                     </td>
@@ -147,4 +151,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubCatManage);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductManage);
