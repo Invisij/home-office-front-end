@@ -4,74 +4,64 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
-import mainCatService from '../../../../services/mainCatService';
+import discountService from '../../../../services/discountService';
 
-import './MainCatManage.scss';
+import './DiscountManage.scss';
 
-class MainCatManage extends Component {
+class DiscountManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mainCatArr: [],
+            discountArr: [],
         };
     }
 
     componentDidMount() {
-        this.readMainCat();
+        this.readDiscount();
     }
 
-    readMainCat = async () => {
-        const response = await mainCatService.readMainCat();
+    readDiscount = async () => {
+        const response = await discountService.readDiscount();
         if (response && response.errCode === 0) {
-            await response.data.forEach((item) => {
-                if (item.image) {
-                    item.image = Buffer.from(item.image, 'base64').toString('binary');
-                }
-            });
             this.setState({
-                mainCatArr: response.data,
+                discountArr: response.data,
             });
         }
     };
 
     handleName = async (event) => {
-        const response = await mainCatService.readMainCat(event.target.value);
+        const response = await discountService.readDiscount(event.target.value);
         if (response && response.errCode === 0) {
-            response.data.forEach((item) => {
-                if (item.image) {
-                    item.image = Buffer.from(item.image, 'base64').toString('binary');
-                }
-            });
             this.setState({
-                mainCatArr: response.data,
+                discountArr: response.data,
             });
         }
     };
 
-    handleCreateMainCat = () => {
-        this.props.history.push('/system/main-cat-create');
+    handleCreateDiscount = () => {
+        this.props.history.push('/system/discount-create');
     };
 
-    handleUpdateMainCat = (mainCat) => {
+    handleUpdateDiscount = (discount) => {
         this.props.history.push({
-            pathname: `/system/main-cat-update/${mainCat.id}`,
+            pathname: `/system/discount-update/${discount.id}`,
         });
     };
 
-    handleDeleteMainCat = async (mainCat) => {
-        const response = await mainCatService.deleteMainCat(mainCat.id);
+    handleDeleteDiscount = async (discount) => {
+        const response = await discountService.deleteDiscount(discount.id);
         if (response && response.errCode === 0) {
-            this.readMainCat();
-            toast.success(`Xóa danh mục chính "${mainCat.name}" thành công`);
+            this.readDiscount();
+            toast.success('Xóa khuyến mãi thành công');
         } else {
-            toast.warning(`Xóa danh mục chính "${mainCat.name}" thất bại`);
+            toast.warning('Xóa khuyến mãi thất bại');
         }
     };
 
     render() {
         return (
-            <div className="main-cat-manage-container container mt-5">
-                <div className="title text-center mb-5">Quản lý danh mục chính</div>
+            <div className="discount-container container mt-5">
+                <div className="title text-center mb-5">Quản lý khuyến mãi</div>
                 <div className="row">
                     <div className="col-2">
                         <div className="input-group mb-3">
@@ -82,11 +72,11 @@ class MainCatManage extends Component {
                                 <input
                                     type="text"
                                     className="form-control input-name"
-                                    name="name"
-                                    placeholder="Tên danh mục chính..."
+                                    name="firstName"
+                                    placeholder="Tên khuyến mãi..."
                                     onChange={(event) => this.handleName(event)}
                                 />
-                                <label htmlFor="name">Tên danh mục chính</label>
+                                <label htmlFor="firstName">Tên khuyến mãi</label>
                             </div>
                         </div>
                     </div>
@@ -95,9 +85,9 @@ class MainCatManage extends Component {
                         <button
                             type="button"
                             className="btn btn-primary btn-lg button-text"
-                            onClick={() => this.handleCreateMainCat()}
+                            onClick={() => this.handleCreateDiscount()}
                         >
-                            Tạo danh mục chính mới
+                            Tạo khuyến mãi mới
                         </button>
                     </div>
                 </div>
@@ -105,25 +95,31 @@ class MainCatManage extends Component {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Tên danh mục chính</th>
-                            <th scope="col">Ảnh</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">phần trăm</th>
                             <th scope="col">Mô tả</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.mainCatArr.map((mainCat, index) => {
+                        {this.state.discountArr.map((discount, index) => {
                             return (
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{mainCat.name}</td>
-                                    <td>{mainCat.image && <img src={mainCat.image} alt="Đây là ảnh danh mục" />}</td>
-                                    <td className="description">{mainCat.description}</td>
+                                    <td>{discount.name}</td>
+                                    <td>{discount.number}</td>
+                                    <td className="description">{discount.description}</td>
                                     <td>
-                                        <div onClick={() => this.handleUpdateMainCat(mainCat)} className="icon-action">
+                                        <div
+                                            onClick={() => this.handleUpdateDiscount(discount)}
+                                            className="icon-action"
+                                        >
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />
                                         </div>
-                                        <div onClick={() => this.handleDeleteMainCat(mainCat)} className="icon-action">
+                                        <div
+                                            onClick={() => this.handleDeleteDiscount(discount)}
+                                            className="icon-action"
+                                        >
                                             <FontAwesomeIcon className="icon-delete" icon={faTrashCan} />
                                         </div>
                                     </td>
@@ -145,4 +141,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainCatManage);
+export default connect(mapStateToProps, mapDispatchToProps)(DiscountManage);

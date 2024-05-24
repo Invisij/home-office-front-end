@@ -1,0 +1,11 @@
+.discount-create-container {
+    .discount-create-body {
+        .btn-back {
+            font-size: 1.3rem;
+            cursor: pointer;
+            &:hover {
+                color: #0071ba;
+            }
+        }
+    }
+}

@@ -12,6 +12,9 @@ import MainCatUpdate from '../containers/System/Admin/Category/MainCatUpdate';
 import SubCatManage from '../containers/System/Admin/Category/SubCatManage';
 import SubCatCreate from '../containers/System/Admin/Category/SubCatCreate';
 import SubCatUpdate from '../containers/System/Admin/Category/SubCatUpdate';
+import DiscountManage from '../containers/System/Admin/Discount/DiscountManage';
+import DiscountCreate from '../containers/System/Admin/Discount/DiscountCreate';
+import DiscountUpdate from '../containers/System/Admin/Discount/DiscountUpdate';
 import ProductCreate from '../containers/System/Admin/Product/ProductCreate';
 
 import './System.scss';
@@ -27,12 +30,19 @@ class System extends Component {
                         <Route path="/system/user-manage" component={UserManage} />
                         <Route path="/system/user-create" component={UserCreate} />
                         <Route path="/system/user-update/:id" component={UserUpdate} />
+
                         <Route path="/system/main-cat-create" component={MainCatCreate} />
                         <Route path="/system/main-cat-manage" component={MainCatManage} />
                         <Route path="/system/main-cat-update/:id" component={MainCatUpdate} />
+
                         <Route path="/system/sub-cat-create" component={SubCatCreate} />
                         <Route path="/system/sub-cat-manage" component={SubCatManage} />
                         <Route path="/system/sub-cat-update/:id" component={SubCatUpdate} />
+
+                        <Route path="/system/discount-create" component={DiscountCreate} />
+                        <Route path="/system/discount-manage" component={DiscountManage} />
+                        <Route path="/system/discount-update/:id" component={DiscountUpdate} />
+
                         <Route path="/system/product-create" component={ProductCreate} />
 
                         <Route

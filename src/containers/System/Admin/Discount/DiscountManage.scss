@@ -1,4 +1,4 @@
-.user-container {
+.discount-container {
     .button-text {
         height: 70%;
         width: 100%;
@@ -19,5 +19,11 @@
                 color: black;
             }
         }
+    }
+    .description {
+        max-width: 500px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

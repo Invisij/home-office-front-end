@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
@@ -97,11 +96,11 @@ class UserManage extends Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Phone number</th>
-                            <th scope="col">Billing address</th>
+                            <th scope="col">Vai trò</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Họ</th>
+                            <th scope="col">Số điện thoại</th>
+                            <th scope="col">Địa chỉ nhận hàng</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>

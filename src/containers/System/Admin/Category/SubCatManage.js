@@ -22,12 +22,12 @@ class SubCatManage extends Component {
 
     readSubCat = async () => {
         const response = await subCatService.readSubCat();
-        response.data.forEach((item) => {
-            if (item.image) {
-                item.image = Buffer.from(item.image, 'base64').toString('binary');
-            }
-        });
         if (response && response.errCode === 0) {
+            response.data.forEach((item) => {
+                if (item.image) {
+                    item.image = Buffer.from(item.image, 'base64').toString('binary');
+                }
+            });
             this.setState({
                 subCatArr: response.data,
             });
@@ -36,12 +36,12 @@ class SubCatManage extends Component {
 
     handleName = async (event) => {
         const response = await subCatService.readSubCat(event.target.value);
-        response.data.forEach((item) => {
-            if (item.image) {
-                item.image = Buffer.from(item.image, 'base64').toString('binary');
-            }
-        });
         if (response && response.errCode === 0) {
+            response.data.forEach((item) => {
+                if (item.image) {
+                    item.image = Buffer.from(item.image, 'base64').toString('binary');
+                }
+            });
             this.setState({
                 subCatArr: response.data,
             });
