@@ -23,11 +23,6 @@ class OrderManage extends Component {
     readOrder = async () => {
         const response = await orderService.readOrder();
         if (response && response.errCode === 0) {
-            response.data.forEach((item) => {
-                if (item.image) {
-                    item.image = Buffer.from(item.image, 'base64').toString('binary');
-                }
-            });
             this.setState({
                 orderArr: response.data,
             });
@@ -37,11 +32,6 @@ class OrderManage extends Component {
     handleName = async (event) => {
         const response = await orderService.readOrder(event.target.value);
         if (response && response.errCode === 0) {
-            response.data.forEach((item) => {
-                if (item.image) {
-                    item.image = Buffer.from(item.image, 'base64').toString('binary');
-                }
-            });
             this.setState({
                 orderArr: response.data,
             });
@@ -62,9 +52,9 @@ class OrderManage extends Component {
         const response = await orderService.deleteOrder(order.id);
         if (response && response.errCode === 0) {
             this.readOrder();
-            toast.success(`Xóa đơn hàng "${order.name}" thành công`);
+            toast.success(`Xóa đơn hàng mã "${order.id}" thành công`);
         } else {
-            toast.warning(`Xóa đơn hàng "${order.name}" thất bại`);
+            toast.warning(`Xóa đơn hàng mã "${order.id}" thất bại`);
         }
     };
 
@@ -104,13 +94,11 @@ class OrderManage extends Component {
                 <table className="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Tên</th>
-                            <th scope="col">Loại đơn hàng</th>
-                            <th scope="col">Giá</th>
+                            <th scope="col">Mã đơn hàng</th>
+                            <th scope="col">Mã khách hàng</th>
+                            <th scope="col">Số sản phẩm</th>
+                            <th scope="col">Địa chỉ giao hàng</th>
                             <th scope="col">Trạng thái</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Ảnh</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -118,13 +106,11 @@ class OrderManage extends Component {
                         {this.state.orderArr.map((order, index) => {
                             return (
                                 <tr key={index}>
-                                    <th scope="row">{index + 1}</th>
-                                    <td>{order.name}</td>
-                                    <td>{order.subCatId}</td>
-                                    <td>{order.price}</td>
-                                    <td>{order.status}</td>
-                                    <td>{order.quantity}</td>
-                                    <td>{order.image && <img src={order.image} alt="Ảnh đơn hàng" />}</td>
+                                    <th scope="row">{order.id}</th>
+                                    <td>{order.customerId}</td>
+                                    <td>{order.amount}</td>
+                                    <td>{order.orderAddress}</td>
+                                    <td>{order.orderStatus}</td>
                                     <td>
                                         <div onClick={() => this.handleUpdateOrder(order)} className="icon-action">
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />

@@ -118,7 +118,7 @@ class ProductManage extends Component {
                         {this.state.productArr.map((product, index) => {
                             return (
                                 <tr key={index}>
-                                    <th scope="row">{index + 1}</th>
+                                    <th scope="row">{product.id}</th>
                                     <td>{product.name}</td>
                                     <td>{product.subCatId}</td>
                                     <td>{product.price}</td>

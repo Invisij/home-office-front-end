@@ -6,3 +6,4 @@ export { default as discountService } from './discountService';
 export { default as productService } from './productService';
 export { default as allCodeService } from './allCodeService';
 export { default as orderService } from './orderService';
+export { default as orderProductService } from './orderProductService';

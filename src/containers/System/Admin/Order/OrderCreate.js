@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeftLong, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import orderService from '../../../../services/orderService';
-import subCatService from '../../../../services/subCatService';
-import discountService from '../../../../services/discountService';
+import userService from '../../../../services/userService';
+import allCodeService from '../../../../services/allCodeService';
+import productService from '../../../../services/productService';
+import orderProductService from '../../../../services/orderProductService';
 import { CommonUtils } from '../../../../utils';
 
 import './OrderCreate.scss';
@@ -15,52 +17,92 @@ class OrderCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            subCatArr: [],
-            discountArr: [],
-            previewImgURL: '',
-            subCatId: '',
-            discountId: '',
-            name: '',
-            price: '',
-            sku: '',
-            image: '',
-            status: '',
-            quantity: '',
+            customerArr: [],
+            statusArr: [],
+            customerId: '',
+            amount: '',
+            orderAddress: '',
+            orderStatus: '',
             description: '',
+            productArr: [{ orderId: '', productId: '', price: '', quantity: '' }],
         };
     }
 
     componentDidMount() {
-        this.fetchSubCats();
-        this.fetchDiscounts();
+        this.fetchCustomers();
+        this.fetchStatuss();
     }
 
-    fetchSubCats = async () => {
-        const response = await subCatService.readSubCat('name');
+    fetchCustomers = async () => {
+        const response = await userService.readUser();
         if (response && response.errCode === 0) {
             this.setState({
-                subCatArr: response.data,
-                subCatId: response.data[0].id,
+                customerArr: response.data,
+                customerId: response.data[0].id,
+                orderAddress: response.data[0].billingAddress,
             });
         }
     };
 
-    fetchDiscounts = async () => {
-        const response = await discountService.readDiscount();
+    fetchStatuss = async () => {
+        const response = await allCodeService.readAllCode('status');
         if (response && response.errCode === 0) {
             this.setState({
-                discountArr: response.data,
-                discountId: response.data[0].id,
+                statusArr: response.data,
+                orderStatus: response.data[0].value,
             });
         }
     };
 
-    onChangeInput = (event, type) => {
+    handleBack = () => {
+        this.props.history.push('/system/order-manage');
+    };
+
+    onChangeInput = (event, type, index = null) => {
         let copyState = { ...this.state };
-        copyState[type] = event.target.value;
+        if (type.includes('productArr')) {
+            const [field, index, key] = type.split('-');
+            copyState.productArr[index][key] = event.target.value;
+            if (key === 'productId') {
+                this.fetchProductPrice(event.target.value, index);
+                return;
+            }
+        } else {
+            copyState[type] = event.target.value;
+            this.setState({
+                ...copyState,
+            });
+            if (type === 'customerId') {
+                this.updateOrderAddress(event.target.value);
+                return;
+            }
+        }
+        this.setState({
+            ...copyState,
+            amount: this.state.productArr.length,
+        });
+    };
+
+    fetchProductPrice = async (productId, index) => {
+        const response = await productService.readProductById(productId);
+        let copyState = { ...this.state };
+        if (response && response.data.length > 0 && response.errCode === 0) {
+            copyState.productArr[index].price = response.data[0].price;
+        } else {
+            copyState.productArr[index].price = 0;
+        }
         this.setState({
             ...copyState,
         });
+    };
+
+    updateOrderAddress = (customerId) => {
+        const selectedCustomer = this.state.customerArr.find((customer) => customer.id == customerId);
+        if (selectedCustomer) {
+            this.setState({
+                orderAddress: selectedCustomer.billingAddress,
+            });
+        }
     };
 
     handleOnChangeImage = async (event) => {
@@ -75,28 +117,60 @@ class OrderCreate extends Component {
             });
         }
     };
+
+    handleAddProduct = async () => {
+        let copyState = { ...this.state };
+        copyState.productArr.push({ orderId: '', productId: '', price: '', quantity: '' });
+        this.setState({
+            ...copyState,
+            amount: copyState.productArr.length,
+        });
+    };
+
+    handleRemoveProduct = async (index) => {
+        let copyState = { ...this.state };
+        copyState.productArr.splice(index, 1);
+        this.setState({
+            ...copyState,
+            amount: copyState.productArr.length,
+        });
+    };
+
     handleAddOrder = async () => {
         const response = await orderService.createOrder({
-            subCatId: this.state.subCatId,
-            discountId: this.state.discountId,
-            name: this.state.name,
-            price: this.state.price,
-            sku: this.state.sku,
-            image: this.state.image,
-            status: this.state.status,
-            quantity: this.state.quantity,
+            customerId: this.state.customerId,
+            amount: this.state.amount,
+            orderAddress: this.state.orderAddress,
+            orderStatus: this.state.orderStatus,
             description: this.state.description,
         });
+        if (response && response.data) {
+            this.state.productArr.forEach(async (item) => {
+                await this.addOrderProduct(item, response.data.id);
+            });
+        }
         this.props.history.push('/system/order-manage');
         if (response && response.errCode === 0) {
-            toast.success(`Thêm đơn hàng "${this.state.name}" thành công`);
+            toast.success(`Thêm đơn hàng thành công`);
         } else {
-            toast.warning(`Thêm đơn hàng "${this.state.name}" thất bại`);
+            toast.warning(`Thêm đơn hàng thất bại`);
         }
     };
 
-    handleBack = () => {
-        this.props.history.push('/system/order-manage');
+    addOrderProduct = async ({ productId, price, quantity }, orderId) => {
+        const response = await orderProductService.createOrderProduct({
+            orderId,
+            productId,
+            price,
+            quantity,
+        });
+        if (response && response.errCode === 0) {
+            toast.success(`Thêm sản phẩm thành công`);
+            return true;
+        } else {
+            toast.warning(`Thêm sản phẩm thất bại`);
+            return false;
+        }
     };
 
     render() {
@@ -110,100 +184,113 @@ class OrderCreate extends Component {
                             <span className="ms-3">Quay lại</span>
                         </div>
                         <div className="row">
-                            <div className="col-3 mb-3">
-                                <label className="form-label">Tên đơn hàng</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Nhập tên đơn hàng..."
-                                    onChange={(event) => this.onChangeInput(event, 'name')}
-                                    value={this.state.name}
-                                />
-                            </div>
                             <div className="col-2 mb-3">
-                                <label className="form-label">Danh mục phụ</label>
+                                <label className="form-label">khách hàng</label>
                                 <select
                                     className="form-select"
-                                    value={this.state.subCatId}
-                                    onChange={(event) => this.onChangeInput(event, 'subCatId')}
+                                    value={this.state.customerId}
+                                    onChange={(event) => this.onChangeInput(event, 'customerId')}
                                 >
-                                    {this.state.subCatArr.map((item) => (
+                                    {this.state.customerArr.map((item) => (
                                         <option key={item.id} value={item.id}>
-                                            {item.name}
+                                            {item.lastName} {item.firstName}
                                         </option>
                                     ))}
                                 </select>
                             </div>
                             <div className="col-2 mb-3">
-                                <label className="form-label">Khuyến mãi</label>
-                                <select
-                                    className="form-select"
-                                    value={this.state.discountId}
-                                    onChange={(event) => this.onChangeInput(event, 'discountId')}
-                                >
-                                    {this.state.discountArr.map((item) => (
-                                        <option key={item.id} value={item.id}>
-                                            {item.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="col-12"></div>
-                            <div className="col-3 mb-3">
-                                <label className="form-label">Thương hiệu</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Nhập tên thương hiệu..."
-                                    onChange={(event) => this.onChangeInput(event, 'sku')}
-                                    value={this.state.sku}
-                                />
-                            </div>
-                            <div className="col-3 mb-3">
-                                <label className="form-label">Giá</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="Nhập giá..."
-                                    onChange={(event) => this.onChangeInput(event, 'price')}
-                                    value={this.state.price}
-                                />
-                            </div>
-                            <div className="col-12"></div>
-                            <div className="col-3 mb-3">
                                 <label className="form-label">Trạng thái</label>
+                                <select
+                                    className="form-select"
+                                    value={this.state.orderStatus}
+                                    onChange={(event) => this.onChangeInput(event, 'orderStatus')}
+                                >
+                                    {this.state.statusArr.map((item) => (
+                                        <option key={item.id} value={item.value}>
+                                            {item.value}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12"></div>
+                            <div className="col-3 mb-3">
+                                <label className="form-label">Địa chỉ giao hàng</label>
                                 <input
                                     className="form-control"
                                     type="text"
-                                    placeholder="Nhập trạng thái..."
-                                    onChange={(event) => this.onChangeInput(event, 'status')}
-                                    value={this.state.status}
+                                    placeholder="Nhập địa chỉ giao hàng..."
+                                    onChange={(event) => this.onChangeInput(event, 'orderAddress')}
+                                    value={this.state.orderAddress}
                                 />
                             </div>
-                            <div className="col-3 mb-3">
+                            <div className="col-1 mb-3">
                                 <label className="form-label">Số lượng</label>
                                 <input
                                     className="form-control"
                                     type="text"
-                                    placeholder="Nhập số lượng..."
-                                    onChange={(event) => this.onChangeInput(event, 'quantity')}
-                                    value={this.state.quantity}
-                                />
-                            </div>
-                            <div className="col-12"></div>
-                            <div className="col-4 mb-3">
-                                <label className="form-label">Ảnh</label>
-                                <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''} alt="Ảnh đơn hàng" />
-                                </div>
-                                <input
-                                    className="form-control"
-                                    type="file"
-                                    onChange={(event) => this.handleOnChangeImage(event)}
+                                    placeholder="1"
+                                    value={this.state.amount}
+                                    disabled
                                 />
                             </div>
                             <div className="col-12"></div>
                             <div className="col-6 mb-3">
+                                <label className="form-label">Thêm sản phẩm: </label>
+                                <button className="btn btn-success me-3 ms-3" onClick={() => this.handleAddProduct()}>
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </button>
+                            </div>
+                            <div className="col-12"></div>
+                            {this.state.productArr.map((item, index) => {
+                                return (
+                                    <div key={item.id} className="row">
+                                        <div className="col-2 mb-3">
+                                            <label className="form-label">Mã sản phẩm</label>
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="Nhập mã sản phẩm"
+                                                onChange={(event) =>
+                                                    this.onChangeInput(event, `productArr-${index}-productId`)
+                                                }
+                                                value={item.productId}
+                                            />
+                                        </div>
+                                        <div className="col-2 mb-3">
+                                            <label className="form-label">nhập số lượng</label>
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="Nhập số lượng"
+                                                onChange={(event) =>
+                                                    this.onChangeInput(event, `productArr-${index}-quantity`)
+                                                }
+                                                value={item.quantity}
+                                            />
+                                        </div>
+                                        <div className="col-2 mb-3">
+                                            <label className="form-label">Giá</label>
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="0"
+                                                value={item.price}
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className="col-1">
+                                            <button
+                                                className="btn btn-danger mt-4"
+                                                onClick={() => this.handleRemoveProduct(index)}
+                                            >
+                                                <FontAwesomeIcon icon={faXmark} />
+                                            </button>
+                                        </div>
+                                        <div className="col-12"></div>
+                                    </div>
+                                );
+                            })}
+                            <div className="col-6 mb-3 mt-5">
                                 <label className="form-label">Mô tả</label>
                                 <textarea
                                     className="form-control"
