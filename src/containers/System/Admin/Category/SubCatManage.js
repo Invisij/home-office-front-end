@@ -1,68 +1,77 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 
-import userService from '../../../../services/userService';
+import subCatService from '../../../../services/subCatService';
 
-import './UserManage.scss';
+import './SubCatManage.scss';
 
-class UserManage extends Component {
+class SubCatManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userArr: [],
+            subCatArr: [],
         };
     }
 
     componentDidMount() {
-        this.readUser();
+        this.readSubCat();
     }
 
-    readUser = async () => {
-        const response = await userService.readUser();
+    readSubCat = async () => {
+        const response = await subCatService.readSubCat();
+        response.data.forEach((item) => {
+            if (item.image) {
+                item.image = Buffer.from(item.image, 'base64').toString('binary');
+            }
+        });
         if (response && response.errCode === 0) {
             this.setState({
-                userArr: response.data,
+                subCatArr: response.data,
             });
         }
     };
 
     handleName = async (event) => {
-        const response = await userService.readUser(event.target.value);
+        const response = await subCatService.readSubCat(event.target.value);
+        response.data.forEach((item) => {
+            if (item.image) {
+                item.image = Buffer.from(item.image, 'base64').toString('binary');
+            }
+        });
         if (response && response.errCode === 0) {
             this.setState({
-                userArr: response.data,
+                subCatArr: response.data,
             });
         }
     };
 
-    handleCreateUser = () => {
-        this.props.history.push('/system/user-create');
+    handleCreateSubCat = () => {
+        this.props.history.push('/system/sub-cat-create');
     };
 
-    handleUpdateUser = (user) => {
+    handleUpdateSubCat = (subCat) => {
         this.props.history.push({
-            pathname: `/system/user-update/${user.id}`,
+            pathname: `/system/sub-cat-update/${subCat.id}`,
         });
     };
 
-    handleDeleteUser = async (user) => {
-        const response = await userService.deleteUser(user.id);
+    handleDeleteSubCat = async (subCat) => {
+        const response = await subCatService.deleteSubCat(subCat.id);
         if (response && response.errCode === 0) {
-            this.readUser();
-            toast.success('Xóa người dùng thành công');
+            this.readSubCat();
+            toast.success(`Xóa danh mục phụ "${subCat.name}" thành công`);
         } else {
-            toast.warning('Xóa người dùng thất bại');
+            toast.warning(`Xóa danh mục phụ "${subCat.name}" thất bại`);
         }
     };
 
     render() {
         return (
-            <div className="user-container container mt-5">
-                <div className="title text-center mb-5">Quản lý người dùng</div>
+            <div className="sub-cat-manage-container container mt-5">
+                <div className="title text-center mb-5">Quản lý danh mục phụ</div>
                 <div className="row">
                     <div className="col-2">
                         <div className="input-group mb-3">
@@ -73,11 +82,11 @@ class UserManage extends Component {
                                 <input
                                     type="text"
                                     className="form-control input-name"
-                                    name="firstName"
-                                    placeholder="Tên người dùng..."
+                                    name="name"
+                                    placeholder="Tên danh mục phụ..."
                                     onChange={(event) => this.handleName(event)}
                                 />
-                                <label htmlFor="firstName">Tên người dùng</label>
+                                <label htmlFor="name">Tên danh mục phụ</label>
                             </div>
                         </div>
                     </div>
@@ -86,9 +95,9 @@ class UserManage extends Component {
                         <button
                             type="button"
                             className="btn btn-primary btn-lg button-text"
-                            onClick={() => this.handleCreateUser()}
+                            onClick={() => this.handleCreateSubCat()}
                         >
-                            Tạo người dùng mới
+                            Tạo danh mục phụ mới
                         </button>
                     </div>
                 </div>
@@ -96,31 +105,27 @@ class UserManage extends Component {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
-                            <th scope="col">Phone number</th>
-                            <th scope="col">Billing address</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Loại danh mục chính</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Mô tả</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.userArr.map((user, index) => {
+                        {this.state.subCatArr.map((subCat, index) => {
                             return (
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{user.email}</td>
-                                    <td>{user.roleId}</td>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{user.phoneNumber}</td>
-                                    <td>{user.billingAddress}</td>
+                                    <td>{subCat.name}</td>
+                                    <td>{subCat.mainCatId}</td>
+                                    <td>{subCat.image && <img src={subCat.image} alt="Đây là ảnh danh mục" />}</td>
+                                    <td className="description">{subCat.description}</td>
                                     <td>
-                                        <div onClick={() => this.handleUpdateUser(user)} className="icon-action">
+                                        <div onClick={() => this.handleUpdateSubCat(subCat)} className="icon-action">
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />
                                         </div>
-                                        <div onClick={() => this.handleDeleteUser(user)} className="icon-action">
+                                        <div onClick={() => this.handleDeleteSubCat(subCat)} className="icon-action">
                                             <FontAwesomeIcon className="icon-delete" icon={faTrashCan} />
                                         </div>
                                     </td>
@@ -142,4 +147,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManage);
+export default connect(mapStateToProps, mapDispatchToProps)(SubCatManage);

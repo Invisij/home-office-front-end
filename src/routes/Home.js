@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import HomePage from '../containers/HomePage/HomePage';
 import HomeHeader from '../components/HomeHeader/HomeHeader';
 import HomeFooter from '../components/HomeFooter/HomeFooter';
+
+import HomePage from '../containers/HomePage/HomePage';
+import MainCatPage from '../containers/MainCatPage/MainCatPage';
 
 import './Home.scss';
 
@@ -15,8 +17,8 @@ class Home extends Component {
                 <HomeHeader />
                 <div className="home-body">
                     <Switch>
-                        {/* <Route path="" component={HomePage} /> */}
-                        {/* <Route path="/home" component={HomePage} /> */}
+                        <Route path="/MainCatPage" component={MainCatPage} />
+                        <Route path="/home" component={HomePage} />
                         <Route path="" component={HomePage} />
                     </Switch>
                 </div>

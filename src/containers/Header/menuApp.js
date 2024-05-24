@@ -1,6 +1,5 @@
 export const adminMenu = [
     {
-        //Quản lý người dùng
         name: 'Người dùng',
         menus: [
             {
@@ -14,7 +13,6 @@ export const adminMenu = [
         ],
     },
     {
-        //Quản lý người dùng
         name: 'Danh mục',
         menus: [
             {
@@ -22,21 +20,25 @@ export const adminMenu = [
                 link: '/system/main-cat-manage',
             },
             {
-                name: 'Tạo danh mục chính',
-                link: '/system/main-cat-create',
-            },
-            {
                 name: 'Quản lý danh mục phụ',
                 link: '/system/sub-cat-manage',
-            },
-            {
-                name: 'Tạo danh mục phụ',
-                link: '/system/sub-cat-create',
             },
         ],
     },
     {
-        //Quản lý người dùng
+        name: 'Khuyến mãi',
+        menus: [
+            {
+                name: 'Quản lý khuyến mãi',
+                link: '/system/discount-manage',
+            },
+            {
+                name: 'Tạo khuyến mãi',
+                link: '/system/discount-create',
+            },
+        ],
+    },
+    {
         name: 'Sản phẩm',
         menus: [
             {
@@ -49,6 +51,16 @@ export const adminMenu = [
             },
         ],
     },
+    {
+        name: 'Đơn hàng',
+        menus: [
+            {
+                name: 'Quản lý đơn hàng',
+                link: '/system/order-manage',
+            },
+        ],
+    },
+
     // {
     //     //hệ thống
     //     name: 'menu.system.header',

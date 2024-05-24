@@ -1,95 +1,150 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
-import userService from '../../../../services/userService';
-import * as action from '../../../../store/actions';
+import subCatService from '../../../../services/subCatService';
+import mainCatService from '../../../../services/mainCatService';
+import { CommonUtils } from '../../../../utils';
 
-import './MainCatCreate.scss';
+import './SubCatCreate.scss';
 
 class SubCatCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roleArr: [],
+            mainCatArr: [],
             previewImgURL: '',
+            name: '',
+            mainCatId: '',
+            image: '',
+            description: '',
         };
     }
 
     componentDidMount() {
-        this.props.getRoleStart();
+        this.fetchMainCats();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.roleArr !== this.props.roleArr) {
+    fetchMainCats = async () => {
+        const response = await mainCatService.readMainCat('name');
+        if (response && response.errCode === 0) {
             this.setState({
-                roleArr: this.props.roleArr,
-            });
-        }
-    }
-
-    handleOnChangeImage = (event) => {
-        const file = event.target.files[0];
-        if (event.target.files[0]) {
-            this.setState({
-                previewImgURL: URL.createObjectURL(file),
+                mainCatArr: response.data,
+                mainCatId: response.data[0].id,
             });
         }
     };
 
+    onChangeInput = (event, type) => {
+        let copyState = { ...this.state };
+        copyState[type] = event.target.value;
+        this.setState({
+            ...copyState,
+        });
+    };
+
+    handleOnChangeImage = async (event) => {
+        const data = event.target.files;
+        const file = data[0];
+        if (file) {
+            const base64 = await CommonUtils.getBase64(file);
+            const objectUrl = URL.createObjectURL(file);
+            this.setState({
+                previewImgURL: objectUrl,
+                image: base64,
+            });
+        }
+    };
+    handleAddSubCat = async () => {
+        const response = await subCatService.createSubCat({
+            mainCatId: this.state.mainCatId,
+            name: this.state.name,
+            image: this.state.image,
+            description: this.state.description,
+        });
+        this.props.history.push('/system/sub-cat-manage');
+        if (response && response.errCode === 0) {
+            toast.success(`Thêm danh mục phụ "${this.state.name}" thành công`);
+        } else {
+            toast.warning(`Thêm danh mục phụ "${this.state.name}" thất bại`);
+        }
+    };
+
+    handleBack = () => {
+        this.props.history.push('/system/sub-cat-manage');
+    };
+
     render() {
         return (
-            <div className="user-redux-container">
+            <div className="sub-cat-create-container">
                 <div className="title">Tạo danh mục phụ</div>
-                <div className="user-redux-body mt-5">
+                <div className="sub-cat-create-body mt-5">
                     <div className="container">
-                        <div className="col-4 mb-3">
-                            <label className="form-label">Email</label>
-                            <input className="form-control" type="email" />
+                        <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
+                            <FontAwesomeIcon icon={faArrowLeftLong} />
+                            <span className="ms-3">Quay lại</span>
                         </div>
-                        <div className="col-4 mb-3">
-                            <label className="form-label">Mật khẩu</label>
-                            <input className="form-control" type="password" />
-                        </div>
-                        <div className="col-2 mb-3">
-                            <label className="form-label">Vai trò</label>
-                            <select className="form-select">
-                                {this.state.roleArr.map((item) => (
-                                    <option key={item.key} value={item.key}>
-                                        {item.value}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-3 mb-3">
-                            <label className="form-label">Họ</label>
-                            <input className="form-control" type="text" />
-                        </div>
-                        <div className="col-3 mb-3">
-                            <label className="form-label">Tên</label>
-                            <input className="form-control" type="text" />
-                        </div>
-                        <div className="col-4 mb-3">
-                            <label className="form-label">Điện thoại</label>
-                            <input className="form-control" type="text" />
-                        </div>
-                        <div className="col-9 mb-3">
-                            <label className="form-label">Địa chỉ</label>
-                            <input className="form-control" type="text" />
-                        </div>
-                        <div className="col-4 mb-3">
-                            <label className="form-label">Ảnh</label>
-                            <div className="mb-3 img-preview">
-                                <img src={this.state.previewImgURL || ''}></img>
+                        <div className="row">
+                            <div className="col-3 mb-3">
+                                <label className="form-label">Tên danh mục phụ</label>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    placeholder="Nhập tên danh mục..."
+                                    onChange={(event) => this.onChangeInput(event, 'name')}
+                                    value={this.state.name}
+                                />
                             </div>
-                            <input
-                                className="form-control"
-                                type="file"
-                                onChange={(event) => this.handleOnChangeImage(event)}
-                            />
+                            <div className="col-2 mb-3">
+                                <label className="form-label">Danh mục chính</label>
+                                <select
+                                    className="form-select"
+                                    value={this.state.mainCatId}
+                                    onChange={(event) => this.onChangeInput(event, 'mainCatId')}
+                                >
+                                    {this.state.mainCatArr.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12"></div>
+                            <div className="col-4 mb-3">
+                                <label className="form-label">Ảnh</label>
+                                <div className="mb-3 img-preview">
+                                    <img src={this.state.previewImgURL || ''}></img>
+                                </div>
+                                <input
+                                    className="form-control"
+                                    type="file"
+                                    onChange={(event) => this.handleOnChangeImage(event)}
+                                />
+                            </div>
+                            <div className="col-12"></div>
+                            <div className="col-6 mb-3">
+                                <label className="form-label">Mô tả</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="3"
+                                    placeholder="Nhập mô tả..."
+                                    onChange={(event) => this.onChangeInput(event, 'description')}
+                                    value={this.state.description}
+                                ></textarea>
+                            </div>
+                            <div className="col-12"></div>
+                            <div className="col-3">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary me-3"
+                                    onClick={() => this.handleAddSubCat()}
+                                >
+                                    Thêm danh mục
+                                </button>
+                            </div>
                         </div>
-                        <button type="submit" className="btn btn-primary me-3">
-                            Thêm
-                        </button>
                     </div>
                 </div>
             </div>
@@ -98,16 +153,11 @@ class SubCatCreate extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
-        roleArr: state.admin.roleArr,
-        isLoadingRoleArr: state.admin.isLoadingRoleArr,
-    };
+    return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        getRoleStart: () => dispatch(action.getRoleStart()),
-    };
+    return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubCatCreate);

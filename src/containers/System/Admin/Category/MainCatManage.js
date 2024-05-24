@@ -22,13 +22,11 @@ class MainCatManage extends Component {
 
     readMainCat = async () => {
         const response = await mainCatService.readMainCat();
-
         response.data.forEach((item) => {
             if (item.image) {
                 item.image = Buffer.from(item.image, 'base64').toString('binary');
             }
         });
-
         if (response && response.errCode === 0) {
             this.setState({
                 mainCatArr: response.data,
@@ -56,8 +54,7 @@ class MainCatManage extends Component {
 
     handleUpdateMainCat = (mainCat) => {
         this.props.history.push({
-            pathname: '/system/main-cat-update',
-            state: { mainCat },
+            pathname: `/system/main-cat-update/${mainCat.id}`,
         });
     };
 
@@ -120,10 +117,8 @@ class MainCatManage extends Component {
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
                                     <td>{mainCat.name}</td>
-                                    <td>
-                                        <img src={mainCat.image} alt="Đây là ảnh danh mục" />
-                                    </td>
-                                    <td>{mainCat.description}</td>
+                                    <td>{mainCat.image && <img src={mainCat.image} alt="Đây là ảnh danh mục" />}</td>
+                                    <td className="description">{mainCat.description}</td>
                                     <td>
                                         <div onClick={() => this.handleUpdateMainCat(mainCat)} className="icon-action">
                                             <FontAwesomeIcon className="icon-edit" icon={faPenToSquare} />

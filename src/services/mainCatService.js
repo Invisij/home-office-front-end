@@ -4,6 +4,9 @@ const mainCatService = {
     readMainCat(name) {
         return axios.get(`/v1/api/read-main-cat?name=${name || ''}`);
     },
+    readMainCatById(id) {
+        return axios.get(`/v1/api/read-main-cat?id=${id || ''}`);
+    },
     createMainCat(data) {
         return axios.post(`/v1/api/create-main-cat`, data);
     },

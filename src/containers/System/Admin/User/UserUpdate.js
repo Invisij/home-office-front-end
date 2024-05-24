@@ -12,21 +12,21 @@ import './UserUpdate.scss';
 class UserUpdate extends Component {
     constructor(props) {
         super(props);
-        const { id, email, roleId, firstName, lastName, phoneNumber, billingAddress } = this.props.location.state.user;
         this.state = {
             roleArr: [],
-            id,
-            email,
-            roleId,
-            firstName,
-            lastName,
-            phoneNumber,
-            billingAddress,
+            id: '',
+            email: '',
+            roleId: '',
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            billingAddress: '',
         };
     }
 
     componentDidMount() {
         this.props.getRoleStart();
+        this.loadUserDetails();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -36,6 +36,27 @@ class UserUpdate extends Component {
             });
         }
     }
+    loadUserDetails = async () => {
+        const userId = this.props.match.params.id;
+        if (userId) {
+            const response = await userService.readUserById(userId);
+            if (response && response.errCode === 0) {
+                const user = response.data[0];
+                this.setState({
+                    id: user.id,
+                    email: user.email,
+                    roleId: user.roleId,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    phoneNumber: user.phoneNumber,
+                    billingAddress: user.billingAddress,
+                });
+            } else {
+                toast.warning('Không tìm thấy người dùng');
+                this.props.history.push('/system/user-manage');
+            }
+        }
+    };
 
     onChangeInput = (event, type) => {
         let copyState = { ...this.state };

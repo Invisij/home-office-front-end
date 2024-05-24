@@ -4,25 +4,67 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
+import subCatService from '../../../../services/subCatService';
 import mainCatService from '../../../../services/mainCatService';
 import { CommonUtils } from '../../../../utils';
 
-import './MainCatCreate.scss';
+import './SubCatUpdate.scss';
 
-class MainCatCreate extends Component {
+class SubCatUpdate extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            mainCatArr: [],
             previewImgURL: '',
+            mainCatId: '',
+            id: '',
             name: '',
             image: '',
             description: '',
         };
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.fetchMainCats();
+        this.loadSubCatDetails();
+    }
+
+    fetchMainCats = async () => {
+        const response = await mainCatService.readMainCat('name');
+        if (response && response.errCode === 0) {
+            this.setState({
+                mainCatArr: response.data,
+                mainCatId: response.data[0].id,
+            });
+        }
+    };
 
     componentDidUpdate(prevProps, prevState, snapshot) {}
+
+    loadSubCatDetails = async () => {
+        const subCatId = this.props.match.params.id;
+        if (subCatId) {
+            const response = await subCatService.readSubCatById(subCatId);
+            if (response && response.errCode === 0) {
+                response.data.forEach((item) => {
+                    if (item.image) {
+                        item.image = Buffer.from(item.image, 'base64').toString('binary');
+                    }
+                });
+                const subCat = response.data[0];
+                this.setState({
+                    id: subCat.id,
+                    mainCatId: subCat.mainCatId,
+                    name: subCat.name,
+                    image: subCat.image,
+                    description: subCat.description,
+                });
+            } else {
+                toast.warning('Không tìm thấy danh mục phụ');
+                this.props.history.push('/system/sub-cat-manage');
+            }
+        }
+    };
 
     onChangeInput = (event, type) => {
         let copyState = { ...this.state };
@@ -44,29 +86,31 @@ class MainCatCreate extends Component {
             });
         }
     };
-    handleAddMainCat = async () => {
-        const response = await mainCatService.createMainCat({
+    handleUpdateSubCat = async () => {
+        const response = await subCatService.updateSubCat({
+            id: this.state.id,
+            mainCatId: this.state.mainCatId,
             name: this.state.name,
             image: this.state.image,
             description: this.state.description,
         });
-        this.props.history.push('/system/main-cat-manage');
+        this.props.history.push('/system/sub-cat-manage');
         if (response && response.errCode === 0) {
-            toast.success(`Thêm danh mục chính "${this.state.name}" thành công`);
+            toast.success(`Sửa danh mục phụ "${this.state.name}" thành công`);
         } else {
-            toast.warning(`Thêm danh mục chính "${this.state.name}" thất bại`);
+            toast.warning(`Sửa danh mục phụ "${this.state.name}" thất bại`);
         }
     };
 
     handleBack = () => {
-        this.props.history.push('/system/main-cat-manage');
+        this.props.history.push('/system/sub-cat-manage');
     };
 
     render() {
         return (
-            <div className="main-cat-create-container">
-                <div className="title">Tạo danh mục chính</div>
-                <div className="main-cat-create-body mt-5">
+            <div className="sub-cat-update-container">
+                <div className="title">Sửa danh mục phụ</div>
+                <div className="sub-cat-update-body mt-5">
                     <div className="container">
                         <div className="mb-3 btn-back" onClick={() => this.handleBack()}>
                             <FontAwesomeIcon icon={faArrowLeftLong} />
@@ -74,7 +118,7 @@ class MainCatCreate extends Component {
                         </div>
                         <div className="row">
                             <div className="col-3 mb-3">
-                                <label className="form-label">Tên danh mục chính</label>
+                                <label className="form-label">Tên danh mục phụ</label>
                                 <input
                                     className="form-control"
                                     type="text"
@@ -83,11 +127,25 @@ class MainCatCreate extends Component {
                                     value={this.state.name}
                                 />
                             </div>
+                            <div className="col-2 mb-3">
+                                <label className="form-label">Danh mục chính</label>
+                                <select
+                                    className="form-select"
+                                    value={this.state.mainCatId}
+                                    onChange={(event) => this.onChangeInput(event, 'mainCatId')}
+                                >
+                                    {this.state.mainCatArr.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             <div className="col-12"></div>
                             <div className="col-4 mb-3">
                                 <label className="form-label">Ảnh</label>
                                 <div className="mb-3 img-preview">
-                                    <img src={this.state.previewImgURL || ''}></img>
+                                    <img src={this.state.previewImgURL || this.state.image}></img>
                                 </div>
                                 <input
                                     className="form-control"
@@ -107,13 +165,13 @@ class MainCatCreate extends Component {
                                 ></textarea>
                             </div>
                             <div className="col-12"></div>
-                            <div className="col-3">
+                            <div className="col-1">
                                 <button
                                     type="submit"
                                     className="btn btn-primary me-3"
-                                    onClick={() => this.handleAddMainCat()}
+                                    onClick={() => this.handleUpdateSubCat()}
                                 >
-                                    Thêm danh mục
+                                    Sửa
                                 </button>
                             </div>
                         </div>
@@ -132,4 +190,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainCatCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(SubCatUpdate);

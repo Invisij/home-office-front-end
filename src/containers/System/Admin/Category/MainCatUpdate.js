@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 import mainCatService from '../../../../services/mainCatService';
-import * as action from '../../../../store/actions';
 import { CommonUtils } from '../../../../utils';
 
 import './MainCatUpdate.scss';
@@ -13,19 +12,44 @@ import './MainCatUpdate.scss';
 class MainCatUpdate extends Component {
     constructor(props) {
         super(props);
-        const { id, name, image, description } = this.props.location.state.mainCat;
         this.state = {
             previewImgURL: '',
-            id,
-            name,
-            image,
-            description,
+            id: '',
+            name: '',
+            image: '',
+            description: '',
         };
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.loadMainCatDetails();
+    }
 
     componentDidUpdate(prevProps, prevState, snapshot) {}
+
+    loadMainCatDetails = async () => {
+        const mainCatId = this.props.match.params.id;
+        if (mainCatId) {
+            const response = await mainCatService.readMainCatById(mainCatId);
+            if (response && response.errCode === 0) {
+                response.data.forEach((item) => {
+                    if (item.image) {
+                        item.image = Buffer.from(item.image, 'base64').toString('binary');
+                    }
+                });
+                const mainCat = response.data[0];
+                this.setState({
+                    id: mainCat.id,
+                    name: mainCat.name,
+                    image: mainCat.image,
+                    description: mainCat.description,
+                });
+            } else {
+                toast.warning('Không tìm thấy danh mục chính');
+                this.props.history.push('/system/main-cat-manage');
+            }
+        }
+    };
 
     onChangeInput = (event, type) => {
         let copyState = { ...this.state };

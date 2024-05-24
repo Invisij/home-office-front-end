@@ -7,6 +7,9 @@ const userService = {
     readUser(firstName) {
         return axios.get(`/v1/api/read-user?firstName=${firstName || ''}`);
     },
+    readUserById(id) {
+        return axios.get(`/v1/api/read-user?id=${id || ''}`);
+    },
     createUser(data) {
         return axios.post(`/v1/api/create-user`, data);
     },
