@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import * as actions from '../../../store/actions';
 
 import 'tippy.js/dist/tippy.css';
 import './UserPopper.scss';
@@ -7,19 +10,44 @@ import './UserPopper.scss';
 class UserPopper extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            check: false,
-        };
+        this.state = {};
     }
     render() {
+        const { processLogout, isLoggedIn, userInfo } = this.props;
         return (
             <div className="user-popper-wrapper">
-                <a href="/login" className="btn-signin user-btn">
-                    Đăng nhập
-                </a>
-                <a href="/" className="btn-signup user-btn">
-                    Đăng ký
-                </a>
+                {isLoggedIn && userInfo ? (
+                    <div className="user-popper-content">
+                        <div className="user-popper-item">
+                            <Link to={`/user-info-page/${userInfo.id}`} className="user-popper-link">
+                                Thông tin tài khoản
+                            </Link>
+                        </div>
+                        <div className="user-popper-item">
+                            <Link to={`/order-page/${userInfo.id}`} className="user-popper-link">
+                                Đơn hàng
+                            </Link>
+                        </div>
+                        <div className="user-popper-item">
+                            <div className="btn-signin user-btn" onClick={processLogout}>
+                                Đăng xuất
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="user-popper-content">
+                        <div className="user-popper-item">
+                            <Link to="/login" className="user-popper-link">
+                                Đăng nhập
+                            </Link>
+                        </div>
+                        <div className="user-popper-item">
+                            <Link to="/register" className="user-popper-link">
+                                Đăng ký
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
@@ -28,11 +56,14 @@ class UserPopper extends Component {
 const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.user.isLoggedIn,
+        userInfo: state.user.userInfo,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        processLogout: () => dispatch(actions.processLogout()),
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPopper);

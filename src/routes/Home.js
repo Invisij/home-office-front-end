@@ -17,8 +17,7 @@ class Home extends Component {
                 <HomeHeader />
                 <div className="home-body">
                     <Switch>
-                        <Route path="/MainCatPage" component={MainCatPage} />
-                        <Route path="/home" component={HomePage} />
+                        <Route path="/main-cat-page/:id" component={MainCatPage} />
                         <Route path="" component={HomePage} />
                     </Switch>
                 </div>

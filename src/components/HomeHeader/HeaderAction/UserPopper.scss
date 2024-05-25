@@ -1,36 +1,44 @@
 .user-popper-wrapper {
-    padding: 10px 22px;
     min-height: 70px;
     width: 220px;
     border-top: 1px solid #0097b2;
     background: rgb(255, 255, 255);
     box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    .user-btn {
-        cursor: pointer;
-        outline: 0px;
-        border: 1px solid rgba(0, 0, 0, 0);
-        border-radius: 5px;
-        padding: 10px 15px;
-        width: 100%;
-        color: white;
-        text-decoration: none;
-        justify-content: center;
+    .user-popper-content {
         display: flex;
-        + .user-btn {
-            margin-top: 10px;
+        justify-content: left;
+        flex-direction: column;
+        padding: 10px 0;
+        .user-popper-item {
+            padding: 7px 14px;
         }
-        &:hover {
-            background-color: #2f2f2f;
+        .user-btn {
+            cursor: pointer;
+            outline: 0px;
+            border: 1px solid rgba(0, 0, 0, 0);
+            border-radius: 5px;
+            padding: 10px 15px;
+            width: 100%;
+            color: white;
+            text-decoration: none;
+            justify-content: center;
+            display: flex;
+            + .user-btn {
+                margin-top: 10px;
+            }
+            &:hover {
+                background-color: #2f2f2f;
+            }
         }
-    }
-    .btn-signin {
-        background-color: #777;
-    }
-    .btn-signup {
-        background-color: #0097b2;
+        .btn-signin {
+            background-color: #777;
+        }
+        .btn-signup {
+            background-color: #0097b2;
+        }
+        a:hover {
+            color: #0097b2;
+            text-decoration: underline;
+        }
     }
 }

@@ -5,7 +5,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    // margin: 0 200px;
     height: 100px;
     width: 100vw;
     border: 1px solid transparent;
@@ -81,11 +80,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        .header-menu-item {
+        a {
+            &.header-menu-item {
+                padding: 0px 14px;
+                line-height: 40px;
+                font-weight: 600;
+            }
             cursor: pointer;
-            padding: 0px 14px;
-            line-height: 40px;
-            font-weight: 600;
         }
     }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -7,81 +8,49 @@ import Tippy from '@tippyjs/react/headless';
 import CartPopper from './HeaderAction/CartPopper';
 import UserPopper from './HeaderAction/UserPopper';
 
-import './HomeHeader.scss';
+import mainCatService from '../../services/mainCatService';
 
-const LIST_ITEM = [
-    {
-        id: 1,
-        name: 'Nội thất văn phòng',
-    },
-    {
-        id: 2,
-        name: 'Phòng Khách',
-    },
-    {
-        id: 3,
-        name: 'Bếp & Phòng Ăn',
-    },
-    {
-        id: 4,
-        name: 'Phòng Ngủ',
-    },
-    {
-        id: 5,
-        name: 'Phòng Làm Việc',
-    },
-    {
-        id: 6,
-        name: 'Phòng Làm Việc',
-    },
-    {
-        id: 7,
-        name: 'Phòng Tắm',
-    },
-    {
-        id: 8,
-        name: 'Bàn ghế Cafe - Ngoài trời',
-    },
-    {
-        id: 9,
-        name: 'Ống Nước',
-    },
-    {
-        id: 10,
-        name: 'Trường Học',
-    },
-    {
-        id: 11,
-        name: 'Shop - Salon',
-    },
-    {
-        id: 12,
-        name: 'Phụ kiện',
-    },
-];
+import './HomeHeader.scss';
 
 class HomeHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            mainCatArr: [],
             isOpenCart: false,
             isOpenUser: false,
         };
     }
+
+    componentDidMount() {
+        this.loadMainCatArr();
+    }
+
+    loadMainCatArr = async () => {
+        const response = await mainCatService.readMainCat('all');
+        if (response && response.errCode === 0 && response.data) {
+            this.setState({
+                mainCatArr: response.data,
+            });
+        }
+    };
+
     handleHiddenCart = () => {
         this.setState({
             isOpenCart: !this.state.isOpenCart,
         });
     };
+
     handleHiddenUser = () => {
         this.setState({
             isOpenUser: !this.state.isOpenUser,
         });
     };
+
     render() {
         return (
             <div className="home-header">
-                <a href="/" className="header-logo" />
+                <Link to={``} className="header-logo" />
                 <div className="header-search">
                     <input className="header-search-input" type="text" placeholder="Tìm kiếm sản phẩm..." />
                     <FontAwesomeIcon className="header-search-icon" icon={faMagnifyingGlass} />
@@ -126,10 +95,10 @@ class HomeHeader extends Component {
                 </div>
 
                 <div className="header-menu">
-                    {LIST_ITEM.map((item, index) => (
-                        <div key={index} className="header-menu-item">
+                    {this.state.mainCatArr.map((item) => (
+                        <Link key={item.id} to={`/main-cat-page/${item.id}`} className="header-menu-item">
                             {item.name}
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
