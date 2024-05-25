@@ -26,9 +26,9 @@ class BannerSlider extends Component {
         return (
             <div className={'image-slider-container ' + this.props.className}>
                 <Slider {...this.settings}>
-                    <div className="image-slider">
+                    {/* <div className="image-slider">
                         <img src={slider1} alt="" />
-                    </div>
+                    </div> */}
                     <div className="image-slider">
                         <img src={slider2} alt="" />
                     </div>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import mainCatService from '../../services/mainCatService';
+import subCatService from '../../services/subCatService';
 
 import './MainCatPage.scss';
 
@@ -22,19 +23,31 @@ class MainCatPage extends Component {
         super(props);
         this.state = {
             mainCat: {},
+            subCat: [],
         };
     }
 
     componentDidMount() {
         this.readMainCat();
+        this.readSubCat();
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.id !== prevProps.match.params.id) {
             this.readMainCat();
+            this.readSubCat();
         }
     }
 
+    readSubCat = async () => {
+        const mainCatId = this.props.match.params.id;
+        const response = await subCatService.readSubCatName('all', mainCatId);
+        if (response && response.errCode === 0) {
+            this.setState({
+                subCat: response.data,
+            });
+        }
+    };
     readMainCat = async () => {
         const mainCatId = this.props.match.params.id;
         const response = await mainCatService.readMainCatById(mainCatId);
@@ -53,20 +66,22 @@ class MainCatPage extends Component {
     render() {
         return (
             <div className="main-cat-container container">
-                <div className="main-cat-nav">
-                    <div className="nav-content">
-                        <h3 className="nav-title">Danh mục</h3>
-                        <div className="nav-body">
-                            {list.map((item) => {
-                                return (
-                                    <Link key={item.id} className="nav-body-item">
-                                        {item.name}
-                                    </Link>
-                                );
-                            })}
+                {this.state.subCat.length > 0 && (
+                    <div className="main-cat-nav">
+                        <div className="nav-content">
+                            <h3 className="nav-title">Danh mục</h3>
+                            <div className="nav-body">
+                                {this.state.subCat.map((item) => {
+                                    return (
+                                        <Link key={item.id} className="nav-body-item">
+                                            {item.name}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
                 <div className="main-cat-content row">
                     <div className="col-12 content-item">
                         <h1>{this.state.mainCat.name}</h1>

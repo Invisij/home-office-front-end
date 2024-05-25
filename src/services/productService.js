@@ -7,6 +7,9 @@ const productService = {
     readProductById(id) {
         return axios.get(`/v1/api/read-product?id=${id || ''}`);
     },
+    readProductBySubCatId(subCatId) {
+        return axios.get(`/v1/api/read-product?subCatId=${subCatId || ''}`);
+    },
     createProduct(data) {
         return axios.post(`/v1/api/create-product`, data);
     },

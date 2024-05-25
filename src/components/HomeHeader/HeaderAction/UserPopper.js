@@ -18,6 +18,13 @@ class UserPopper extends Component {
             <div className="user-popper-wrapper">
                 {isLoggedIn && userInfo ? (
                     <div className="user-popper-content">
+                        {(userInfo.roleId == 'R1' || 'R2' == userInfo.roleId) && (
+                            <div className="user-popper-item">
+                                <Link to={`/system`} className="user-popper-link">
+                                    Trang quản lý
+                                </Link>
+                            </div>
+                        )}
                         <div className="user-popper-item">
                             <Link to={`/user-info-page/${userInfo.id}`} className="user-popper-link">
                                 Thông tin tài khoản

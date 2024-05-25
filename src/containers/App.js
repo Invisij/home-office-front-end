@@ -5,7 +5,7 @@ import { ConnectedRouter as Router } from 'connected-react-router';
 import { history } from '../redux';
 import { ToastContainer } from 'react-toastify';
 
-import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authentication';
+import { userIsNotAuthenticated, userIsAuthenticatedAndAdmin } from '../hoc/authentication';
 
 import { path } from '../utils';
 import Home from '../routes/Home';
@@ -39,8 +39,9 @@ class App extends Component {
                         <span className="content-container">
                             <Switch>
                                 <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                                <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                                <Route path={path.SYSTEM} component={userIsAuthenticatedAndAdmin(System)} />
                                 <Route path={path.HOME} exact component={Home} />
+                                {/* Add other public routes here */}
                             </Switch>
                         </span>
                         <ToastContainer

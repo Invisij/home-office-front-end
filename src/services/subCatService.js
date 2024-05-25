@@ -7,6 +7,9 @@ const subCatService = {
     readSubCatById(id) {
         return axios.get(`/v1/api/read-sub-cat?id=${id || ''}`);
     },
+    readSubCatName(name, mainCatId) {
+        return axios.get(`/v1/api/read-sub-cat?name=${name || ''}&mainCatId=${mainCatId || ''}`);
+    },
     createSubCat(data) {
         return axios.post(`/v1/api/create-sub-cat`, data);
     },
