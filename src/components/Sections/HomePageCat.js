@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faStarHalfStroke } from '@fortawesome/free-solid-svg-icons';
 
-import discountService from '../../../services/discountService';
+import discountService from '../../services/discountService';
 
 import './HomePageCat.scss';
 
@@ -92,7 +92,7 @@ class HomePageCat extends Component {
             <div className="home-page-cat">
                 {type == 'image&name' && content && (
                     <div className="cat-item">
-                        <h2 className="home-page-cat-title">{title}</h2>
+                        {title && content.length > 0 && <h2 className="home-page-cat-title">{title}</h2>}
                         <div className="home-page-cat-list-1">
                             {content.map((item) => (
                                 <div key={item} className="home-page-cat-item-1">
@@ -120,7 +120,7 @@ class HomePageCat extends Component {
                 )}
                 {type == 'full' && content && (
                     <div className="cat-item">
-                        {title && <h2 className="home-page-cat-title">{title}</h2>}
+                        {title && content.length > 0 && <h2 className="home-page-cat-title">{title}</h2>}
                         <div className="home-page-cat-list-3">
                             {content.map((item) => {
                                 const discount = this.state.discountArr.find(

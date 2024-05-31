@@ -1,0 +1,45 @@
+.sub-cat-container {
+    display: flex;
+    .sub-cat-nav {
+        min-width: 20%;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        .nav-content {
+            margin-right: 20px;
+            padding-bottom: 15px;
+            box-shadow: 0 0 8px #ccccccb0;
+            display: flex;
+            flex-direction: column;
+            .nav-title {
+                background: transparent;
+                border-bottom: 1px solid #ccc;
+                padding: 8px 10px 4px;
+                margin: 0 0 15px;
+                padding: 8px 10px 4px;
+                font-size: 1.4rem;
+            }
+            .nav-body {
+                a:hover {
+                    text-decoration: underline;
+                }
+                display: flex;
+                flex-direction: column;
+                .nav-body-item {
+                    padding: 5px 12px;
+                }
+            }
+        }
+    }
+    .sub-cat-content {
+        max-width: 100%;
+        width: 100%;
+        margin-left: 20px;
+        .content-item {
+            padding: 4px 0;
+            img {
+                height: auto;
+                width: 100%;
+            }
+        }
+    }
+}

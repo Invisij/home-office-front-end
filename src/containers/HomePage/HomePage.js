@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import productService from '../../services/productService';
 
 import BannerSlider from './BannerSlider/BannerSlider';
-import HomePageCat from './Sections/HomePageCat';
+import HomePageCat from '../../components/Sections/HomePageCat';
 
 import ban1 from '../../assets/images/ban/banner-small-2023-19.jpg';
 import ban2 from '../../assets/images/ban/banner-small-2023-22.jpg';
@@ -118,13 +118,13 @@ class HomePage extends Component {
                     </div>
                 </div>
 
-                <HomePageCat type="image&name" title="Danh Mục Nổi Bật" content={this.state.allProductArr} />
-                <HomePageCat type="image" content={banList} />
+                {/* <HomePageCat type="image&name" title="Danh Mục Nổi Bật" content={this.state.allProductArr} /> */}
                 <HomePageCat type="full" title="mẫu mới 2024" content={this.state.allProductArr} />
-                <HomePageCat type="image" content={gheList} />
+                <HomePageCat type="image" content={banList} />
                 <HomePageCat type="full" title="Bàn làm việc" content={this.state.productSubCatArr[1]} />
-                <HomePageCat type="introduce" title="SẢN PHẨM NỘI THẤT HOMEOFFICE" />
+                <HomePageCat type="image" content={gheList} />
                 <HomePageCat type="full" title="Ghế sofa" content={this.state.productSubCatArr[3]} />
+                <HomePageCat type="introduce" title="SẢN PHẨM NỘI THẤT HOMEOFFICE" />
             </div>
         );
     }
