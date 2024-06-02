@@ -13,6 +13,7 @@ import Cart from '../routes/Cart';
 import Pay from '../routes/Pay';
 import Order from '../routes/Order';
 import Login from './Auth/Login';
+import Register from './Auth/Register';
 import System from '../routes/System';
 
 class App extends Component {
@@ -42,6 +43,7 @@ class App extends Component {
                         <span className="content-container">
                             <Switch>
                                 <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
+                                <Route path={path.REGISTER} component={userIsNotAuthenticated(Register)} />
                                 <Route path={path.SYSTEM} component={userIsAuthenticatedAndAdmin(System)} />
                                 <Route path={path.CART} component={Cart} />
                                 <Route path={path.PAY} component={Pay} />

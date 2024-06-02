@@ -37,7 +37,6 @@ class Login extends Component {
             errMessage: '',
         });
         const response = await userService.handleLogin(this.state.email, this.state.password);
-
         if (response && response.errCode === 0) {
             this.props.userLoginSuccess(response.data);
         } else {

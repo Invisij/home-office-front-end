@@ -20,7 +20,7 @@ class CartPopper extends Component {
     }
 
     async componentDidMount() {
-        const { userInfo, isLoggedIn } = this.props;
+        const { userInfo } = this.props;
         if (userInfo && userInfo.id) {
             await this.readCart();
             this.state.cartProductArr.forEach((item) => {
@@ -32,7 +32,6 @@ class CartPopper extends Component {
 
     async componentDidUpdate(prevProps) {
         const { userInfo, isLoggedIn } = this.props;
-
         if (
             (userInfo && userInfo.id) !== (prevProps.userInfo && prevProps.userInfo.id) ||
             isLoggedIn !== prevProps.isLoggedIn
@@ -60,7 +59,7 @@ class CartPopper extends Component {
         const { userInfo } = this.props;
         if (userInfo && userInfo.id) {
             const response = await cartService.readCart(userInfo.id);
-            if (response && response.errCode === 0) {
+            if (response && response.errCode === 0 && response.data.length > 0) {
                 const cart = response.data[0];
                 const responseProductArr = await cartProductService.readCartProduct(cart.id);
                 if (responseProductArr && responseProductArr.errCode === 0) {
@@ -68,7 +67,11 @@ class CartPopper extends Component {
                         cartProductArr: responseProductArr.data,
                     });
                 }
+            } else {
+                this.setState({ cartProductArr: [] });
             }
+        } else {
+            this.setState({ cartProductArr: [] });
         }
     };
 

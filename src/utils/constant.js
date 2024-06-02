@@ -3,6 +3,7 @@ export const path = {
     CART: '/cart',
     PAY: '/pay',
     ORDER: '/order',
+    REGISTER: '/register',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',
