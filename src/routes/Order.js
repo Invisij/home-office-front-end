@@ -19,7 +19,7 @@ class Order extends Component {
                 </div>
                 <div className="order-body">
                     <Switch>
-                        <Route path="/order/order-search" component={OrderSearch} />
+                        <Route path="/order/order-search/:id" component={OrderSearch} />
                         <Route path="/order/order-page/:id" component={OrderPage} />
                         <Route exact render={() => <Redirect to="/" />} />
                     </Switch>

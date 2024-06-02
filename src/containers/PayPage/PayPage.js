@@ -127,6 +127,7 @@ class PayPage extends Component {
                 productArr: prevState.productArr.filter((product) => product.id !== productId),
                 cartProductArr: prevState.cartProductArr.filter((cartProduct) => cartProduct.productId !== productId),
             }));
+            this.calculateTotal();
         }
     };
 

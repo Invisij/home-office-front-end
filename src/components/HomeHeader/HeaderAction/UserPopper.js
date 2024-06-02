@@ -31,7 +31,7 @@ class UserPopper extends Component {
                             </Link>
                         </div>
                         <div className="user-popper-item">
-                            <Link to={`/order/order-search`} className="user-popper-link">
+                            <Link to={`/order/order-search/${this.props.userInfo.id}`} className="user-popper-link">
                                 Đơn hàng
                             </Link>
                         </div>
