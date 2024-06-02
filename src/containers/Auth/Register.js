@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 import * as actions from '../../store/actions';
 import userService from '../../services/userService';
@@ -45,10 +46,12 @@ class Register extends Component {
 
         if (response && response.errCode === 0) {
             this.props.userLoginSuccess(response.data);
+            toast.success(`Đăng nhập thành công`);
         } else {
             this.setState({
                 errMessage: '! ' + response.message,
             });
+            toast.warning(`Đăng nhập thất bại`);
         }
     };
 

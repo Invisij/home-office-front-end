@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { toast } from 'react-toastify';
 
 import * as actions from '../../store/actions';
 import userService from '../../services/userService';
@@ -39,10 +40,12 @@ class Login extends Component {
         const response = await userService.handleLogin(this.state.email, this.state.password);
         if (response && response.errCode === 0) {
             this.props.userLoginSuccess(response.data);
+            toast.success(`Đăng nhập thành công`);
         } else {
             this.setState({
                 errMessage: '! ' + response.message,
             });
+            toast.warning(`Đăng nhập thất bại`);
         }
     };
 

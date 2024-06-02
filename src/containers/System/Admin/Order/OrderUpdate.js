@@ -59,26 +59,32 @@ class OrderUpdate extends Component {
     loadOrderDetails = async () => {
         const orderId = this.props.match.params.id;
         if (orderId) {
-            const response = await orderService.readOrder(orderId);
-            if (response && response.errCode === 0) {
-                const order = response.data[0];
-                this.setState({
-                    id: order.id,
-                    customerId: order.customerId,
-                    amount: order.amount,
-                    orderAddress: order.orderAddress,
-                    orderStatus: order.orderStatus,
-                    description: order.description,
-                });
-                const responseProductArr = await orderProductService.readOrderProductByOrderId(order.id);
-                if (responseProductArr && responseProductArr.errCode === 0) {
+            try {
+                const response = await orderService.readOrder(orderId);
+                if (response && response.errCode === 0 && response.data && response.data.length > 0) {
+                    const order = response.data[0];
                     this.setState({
-                        productArr: responseProductArr.data,
+                        id: order.id,
+                        customerId: order.customerId,
+                        amount: order.amount,
+                        orderAddress: order.orderAddress,
+                        orderStatus: order.orderStatus,
+                        description: order.description,
                     });
+                    const responseProductArr = await orderProductService.readOrderProductByOrderId(order.id);
+                    if (responseProductArr && responseProductArr.errCode === 0) {
+                        this.setState({
+                            productArr: responseProductArr.data,
+                        });
+                    }
+                } else {
+                    toast.warning('Không tìm thấy đơn hàng');
+                    this.props.history.push('/system/order-manage');
                 }
-            } else {
-                toast.warning('Không tìm thấy danh mục phụ');
-                this.props.history.push('/system/sub-cat-manage');
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                toast.error('Đã xảy ra lỗi khi tải chi tiết đơn hàng');
+                this.props.history.push('/system/order-manage');
             }
         }
     };
