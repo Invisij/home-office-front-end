@@ -29,7 +29,7 @@ class UserUpdate extends Component {
         this.loadUserDetails();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps, prevState) {
         if (prevProps.roleArr !== this.props.roleArr) {
             this.setState({
                 roleArr: this.props.roleArr,

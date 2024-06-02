@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import productService from '../../services/productService';
 import discountService from '../../services/discountService';
 import HomePageCat from '../../components/Sections/HomePageCat';
+import cartService from '../../services/cartService';
+import cartProductService from '../../services/cartProductService';
 
 import './ProductPage.scss';
 
@@ -16,6 +19,7 @@ class ProductPage extends Component {
             fixPrice: null,
             savePrice: null,
             productArr: [],
+            quantity: 1,
         };
     }
 
@@ -66,7 +70,6 @@ class ProductPage extends Component {
 
     readDiscount = async (discountId) => {
         const response = await discountService.readDiscountById(discountId);
-        console.log(response);
         if (response && response.errCode === 0) {
             const discount = response.data[0];
             const { product } = this.state;
@@ -93,8 +96,77 @@ class ProductPage extends Component {
         return numArr.reverse();
     }
 
+    handleIncreaseQuantity = () => {
+        const copyState = { ...this.state };
+        ++copyState.quantity;
+        if (copyState.quantity > this.state.product.quantity) --copyState.quantity;
+        this.setState({
+            ...copyState,
+        });
+    };
+
+    handleReduceQuantity = () => {
+        const copyState = { ...this.state };
+        --copyState.quantity;
+        if (copyState.quantity < 1) copyState.quantity = 1;
+        this.setState({
+            ...copyState,
+        });
+    };
+
+    handleAddCart = async () => {
+        const userId = this.props.userInfo.id;
+        const { product, fixPrice, quantity } = this.state;
+        const responseReadCart = await cartService.readCart(userId);
+        if (responseReadCart && responseReadCart.errCode === 0) {
+            const cart = responseReadCart.data[0];
+            if (!cart) {
+                const responseCreateCart = await cartService.createCart({ userId });
+                if (responseCreateCart && responseCreateCart.errCode === 0) {
+                    const responseCreateCartProduct = await cartProductService.createCartProduct({
+                        cartId: responseCreateCart.data.id,
+                        productId: product.id,
+                        price: fixPrice,
+                        quantity: quantity,
+                    });
+                    if (responseCreateCartProduct && responseCreateCartProduct.errCode === 0) {
+                        toast.success(`Thêm ${product.name} vào giỏ hàng thành công`);
+                    } else {
+                        toast.warning(`Thêm ${product.name} vào giỏ hàng thất bại`);
+                    }
+                }
+            } else {
+                const responseCreateCartProduct = await cartProductService.createCartProduct({
+                    cartId: cart.id,
+                    productId: product.id,
+                    price: fixPrice || product.price,
+                    quantity: quantity,
+                });
+                if (responseCreateCartProduct && responseCreateCartProduct.errCode === 0) {
+                    toast.success(`Thêm ${product.name} vào giỏ hàng thành công`);
+                } else {
+                    if (responseCreateCartProduct.errCode === 3) {
+                        const responseUpdateCartProduct = await cartProductService.updateCartProduct({
+                            id: responseCreateCartProduct.data.id,
+                            quantity: quantity,
+                        });
+                        toast.success(`Sửa ${product.name} trong giỏ hàng thành công`);
+                    } else {
+                        toast.warning(`Thêm ${product.name} vào giỏ hàng thất bại`);
+                    }
+                }
+            }
+        }
+    };
+
+    handlePay = async () => {
+        this.props.history.push({
+            pathname: `/pay/${this.props.userInfo.id}`,
+        });
+    };
+
     render() {
-        const { product, discount, fixPrice, savePrice } = this.state;
+        const { product, discount, fixPrice, savePrice, quantity } = this.state;
         return (
             <div className="product-page container">
                 <div className="product-detail">
@@ -153,15 +225,37 @@ class ProductPage extends Component {
                             </div>
                             <div className="product-quantity-order block-item">
                                 <span className="label">Số lượng:</span>
-                                <span>1</span>
+                                <button
+                                    className="btn btn-outline-secondary me-3"
+                                    onClick={() => this.handleReduceQuantity()}
+                                >
+                                    -
+                                </button>
+                                <span className="block-item-quantity">{quantity || 1}</span>
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    onClick={() => this.handleIncreaseQuantity()}
+                                >
+                                    +
+                                </button>
                             </div>
                             <div className="product-slogan">
                                 <span>ĐẶT HÀNG ONLINE - GIAO HÀNG NHANH HƠN</span>
                             </div>
                             <div className="product-action mt-3">
                                 <div className="action-box">
-                                    <button className="action-btn btn btn-primary green">Thêm vào giỏ</button>
-                                    <button className="action-btn btn btn-warning orange">mua ngay</button>
+                                    <button
+                                        className="action-btn btn btn-primary green"
+                                        onClick={() => this.handleAddCart()}
+                                    >
+                                        Thêm vào giỏ
+                                    </button>
+                                    <button
+                                        className="action-btn btn btn-warning orange"
+                                        onClick={() => this.handlePay()}
+                                    >
+                                        mua ngay
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +284,10 @@ class ProductPage extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        isLoggedIn: state.user.isLoggedIn,
+        userInfo: state.user.userInfo,
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {

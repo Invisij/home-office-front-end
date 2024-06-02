@@ -1,0 +1,55 @@
+.cart-page-container {
+    min-height: 530px;
+    .red {
+        color: #ef1620;
+    }
+    .cart-title {
+        text-transform: uppercase;
+        margin: 30px 0 10px;
+    }
+    .cart-table {
+        margin: 0;
+        img {
+            max-height: 120px;
+        }
+        td {
+            padding-top: 14px;
+            padding-left: 14px;
+        }
+        .delete-product {
+            font-size: 16px;
+            line-height: 16px;
+            color: #ffffff;
+            background-color: #8babbe;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+            margin-left: 4px;
+            user-select: none;
+        }
+        .table-total {
+            background: #dee2e6;
+        }
+    }
+    .cart-action {
+        display: flex;
+        justify-content: space-between;
+        .back {
+            flex: left;
+        }
+        .service {
+            flex: right;
+        }
+        .btn {
+            text-transform: uppercase;
+            + .btn {
+                margin-left: 10px;
+            }
+        }
+    }
+}

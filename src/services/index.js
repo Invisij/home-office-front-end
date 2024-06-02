@@ -7,3 +7,5 @@ export { default as productService } from './productService';
 export { default as allCodeService } from './allCodeService';
 export { default as orderService } from './orderService';
 export { default as orderProductService } from './orderProductService';
+export { default as cartService } from './cartService';
+export { default as cartProductService } from './cartProductService';

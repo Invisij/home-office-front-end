@@ -1,11 +1,87 @@
 .cart-popper-wrapper {
-    padding: 10px 22px;
+    padding-top: 10px;
     min-height: 70px;
-    width: 320px;
+    min-width: 320px;
     border-top: 1px solid #0097b2;
     background: rgb(255, 255, 255);
     box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 12px;
     display: flex;
     justify-content: center;
     align-items: center;
+    .cart-popper-content {
+        width: 100%;
+        height: 100%;
+        ul.cart-content-list {
+            padding: 0 22px;
+            margin: 0;
+            list-style: none;
+            .item {
+                display: flex;
+                padding: 10px 10px 0 0;
+                border-bottom: 1px solid #ecf0f1;
+                position: relative;
+                .item-image {
+                    margin-right: 25px;
+                    img {
+                        height: 40px;
+                        width: 40px;
+                    }
+                }
+                .item-desc {
+                    .link {
+                        cursor: pointer;
+                        display: block;
+                        &:hover {
+                            color: #0097b2;
+                        }
+                    }
+                    .text {
+                        padding: 4px 0;
+                    }
+                }
+                .delete-product {
+                    display: none;
+                    position: absolute;
+                    top: 10px;
+                    right: 0;
+                    font-size: 16px;
+                    line-height: 16px;
+                    color: #ffffff;
+                    background-color: #8babbe;
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 50%;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    border: none;
+                    margin-left: 4px;
+                    user-select: none;
+                    &:hover {
+                        background-color: #354955;
+                    }
+                }
+                &:hover {
+                    .delete-product {
+                        display: flex;
+                    }
+                }
+            }
+        }
+        .content-empty {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .cart-popper-action {
+        .btn {
+            text-transform: uppercase;
+        }
+        padding: 20px;
+        background: #edf2f5;
+        display: flex;
+        justify-content: space-between;
+    }
 }

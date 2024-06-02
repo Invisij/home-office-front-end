@@ -1,5 +1,8 @@
 export const path = {
     HOME: '',
+    CART: '/cart',
+    PAY: '/pay',
+    ORDER: '/order',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',

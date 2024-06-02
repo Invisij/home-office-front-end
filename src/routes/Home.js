@@ -22,7 +22,7 @@ class Home extends Component {
                         <Route path="/main-cat-page/:id" component={MainCatPage} />
                         <Route path="/sub-cat-page/:id" component={SubCatPage} />
                         <Route path="/product-page/:id" component={ProductPage} />
-                        <Route path="" component={HomePage} />
+                        <Route exact path="" component={HomePage} />
                     </Switch>
                 </div>
                 <HomeFooter />

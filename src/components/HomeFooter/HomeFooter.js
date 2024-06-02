@@ -16,7 +16,7 @@ class HomeFooter extends Component {
             <div className="home-footer">
                 <div className="container">
                     <div className="row text-center">
-                        <div className="col-12 mt-3 mb-3 footer-social-network">
+                        <div className="col-12 mt-5 mb-3 footer-social-network">
                             <FontAwesomeIcon icon={faFacebook} />
                             <FontAwesomeIcon icon={faPinterest} />
                             <FontAwesomeIcon icon={faTwitter} />
@@ -34,7 +34,7 @@ class HomeFooter extends Component {
                         <div className="col-12">
                             <p>Showroom Cần Thơ: 311C/9 Hoàng Quốc Việt, Q.Ninh Kiều, Tp.Cần Thơ</p>
                         </div>
-                        <div className="col-12 mb-3">
+                        <div className="col-12 mb-5">
                             <p>Website: www.homeoffice.com.vn | Email: duyvu@homeoffice.com.vn</p>
                         </div>
                     </div>
