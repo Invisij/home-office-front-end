@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import './OrderPage.scss';
+import './OrderSearch.scss';
 
-class OrderPage extends Component {
+class OrderSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -16,8 +16,8 @@ class OrderPage extends Component {
 
     render() {
         return (
-            <div className="order-page-container container">
-                <p>Đây là order page</p>
+            <div className="order-search-container container">
+                <p>Đây là order search</p>
             </div>
         );
     }
@@ -30,4 +30,4 @@ const mapDispatchToProps = (dispatch) => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderPage);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderSearch);

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import HomeFooter from '../components/HomeFooter/HomeFooter';
 
 import OrderPage from '../containers/OrderPage/OrderPage';
+import OrderSearch from '../containers/OrderPage/OrderSearch';
 
 import './Order.scss';
 
@@ -18,7 +19,8 @@ class Order extends Component {
                 </div>
                 <div className="order-body">
                     <Switch>
-                        <Route path="/order/:id" component={OrderPage} />
+                        <Route path="/order/order-search" component={OrderSearch} />
+                        <Route path="/order/order-page/:id" component={OrderPage} />
                         <Route exact render={() => <Redirect to="/" />} />
                     </Switch>
                 </div>

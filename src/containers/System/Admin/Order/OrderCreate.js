@@ -157,7 +157,7 @@ class OrderCreate extends Component {
         }
     };
 
-    addOrderProduct = async ({ productId, price, quantity }, orderId) => {
+    addOrderProduct = async ({ id: productId, price, quantity }, orderId) => {
         const response = await orderProductService.createOrderProduct({
             orderId,
             productId,
@@ -166,10 +166,8 @@ class OrderCreate extends Component {
         });
         if (response && response.errCode === 0) {
             toast.success(`Thêm sản phẩm thành công`);
-            return true;
         } else {
             toast.warning(`Thêm sản phẩm thất bại`);
-            return false;
         }
     };
 

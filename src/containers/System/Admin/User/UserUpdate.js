@@ -124,7 +124,6 @@ class UserUpdate extends Component {
                                 </select>
                             </div>
                             <div className="col-12"></div>
-                            <div className="col-12"></div>
                             <div className="col-3 mb-3">
                                 <label className="form-label">Họ</label>
                                 <input

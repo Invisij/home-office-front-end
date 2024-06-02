@@ -16,6 +16,10 @@
             }
             .main-box {
                 border: 1px solid #edf2f5;
+                textarea:hover {
+                    background-color: #f7f7f7;
+                    border-color: #ccc;
+                }
             }
         }
         .side-content {
