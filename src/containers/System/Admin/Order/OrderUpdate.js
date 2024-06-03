@@ -21,7 +21,7 @@ class OrderUpdate extends Component {
             statusArr: [],
             id: '',
             customerId: '',
-            amount: '',
+            amount: 0,
             orderAddress: '',
             orderStatus: '',
             description: '',
@@ -60,22 +60,24 @@ class OrderUpdate extends Component {
         const orderId = this.props.match.params.id;
         if (orderId) {
             try {
-                const response = await orderService.readOrder(orderId);
+                const response = await orderService.readOrderById(orderId);
                 if (response && response.errCode === 0 && response.data && response.data.length > 0) {
                     const order = response.data[0];
                     this.setState({
                         id: order.id,
                         customerId: order.customerId,
-                        amount: order.amount,
                         orderAddress: order.orderAddress,
                         orderStatus: order.orderStatus,
                         description: order.description,
                     });
                     const responseProductArr = await orderProductService.readOrderProductByOrderId(order.id);
                     if (responseProductArr && responseProductArr.errCode === 0) {
-                        this.setState({
-                            productArr: responseProductArr.data,
-                        });
+                        this.setState(
+                            {
+                                productArr: responseProductArr.data,
+                            },
+                            this.calculateTotalAmount,
+                        );
                     }
                 } else {
                     toast.warning('Không tìm thấy đơn hàng');
@@ -96,26 +98,18 @@ class OrderUpdate extends Component {
     onChangeInput = (event, type, index = null) => {
         let copyState = { ...this.state };
         if (type.includes('productArr')) {
-            const [field, index, key] = type.split('-');
-            copyState.productArr[index][key] = event.target.value;
+            const [field, idx, key] = type.split('-');
+            copyState.productArr[idx][key] = event.target.value;
             if (key === 'productId') {
-                this.fetchProductPrice(event.target.value, index);
-                return;
+                this.fetchProductPrice(event.target.value, idx);
             }
         } else {
             copyState[type] = event.target.value;
-            this.setState({
-                ...copyState,
-            });
             if (type === 'customerId') {
                 this.updateOrderAddress(event.target.value);
-                return;
             }
         }
-        this.setState({
-            ...copyState,
-            amount: this.state.productArr.length,
-        });
+        this.setState(copyState, this.calculateTotalAmount);
     };
 
     fetchProductPrice = async (productId, index) => {
@@ -126,9 +120,7 @@ class OrderUpdate extends Component {
         } else {
             copyState.productArr[index].price = 0;
         }
-        this.setState({
-            ...copyState,
-        });
+        this.setState(copyState, this.calculateTotalAmount);
     };
 
     updateOrderAddress = (customerId) => {
@@ -140,35 +132,23 @@ class OrderUpdate extends Component {
         }
     };
 
-    handleOnChangeImage = async (event) => {
-        const data = event.target.files;
-        const file = data[0];
-        if (file) {
-            const base64 = await CommonUtils.getBase64(file);
-            const objectUrl = URL.createObjectURL(file);
-            this.setState({
-                previewImgURL: objectUrl,
-                image: base64,
-            });
-        }
+    calculateTotalAmount = () => {
+        const totalAmount = this.state.productArr.reduce((total, product) => {
+            return total + product.price * product.quantity;
+        }, 0);
+        this.setState({ amount: totalAmount });
     };
 
     handleAddProduct = async () => {
         let copyState = { ...this.state };
         copyState.productArr.push({ id: '', orderId: '', productId: '', price: '', quantity: '' });
-        this.setState({
-            ...copyState,
-            amount: copyState.productArr.length,
-        });
+        this.setState(copyState, this.calculateTotalAmount);
     };
 
     handleRemoveProduct = async (index) => {
         let copyState = { ...this.state };
         copyState.productArr.splice(index, 1);
-        this.setState({
-            ...copyState,
-            amount: copyState.productArr.length,
-        });
+        this.setState(copyState, this.calculateTotalAmount);
     };
 
     handleUpdateOrder = async () => {
@@ -261,11 +241,11 @@ class OrderUpdate extends Component {
                                 />
                             </div>
                             <div className="col-1 mb-3">
-                                <label className="form-label">Số lượng</label>
+                                <label className="form-label">Tổng tiền</label>
                                 <input
                                     className="form-control"
                                     type="text"
-                                    placeholder="1"
+                                    placeholder="0"
                                     value={this.state.amount}
                                     disabled
                                 />
@@ -280,7 +260,7 @@ class OrderUpdate extends Component {
                             <div className="col-12"></div>
                             {this.state.productArr.map((item, index) => {
                                 return (
-                                    <div key={item.id} className="row">
+                                    <div key={index} className="row">
                                         <div className="col-2 mb-3">
                                             <label className="form-label">Mã sản phẩm</label>
                                             <input
@@ -294,7 +274,7 @@ class OrderUpdate extends Component {
                                             />
                                         </div>
                                         <div className="col-2 mb-3">
-                                            <label className="form-label">nhập số lượng</label>
+                                            <label className="form-label">Nhập số lượng</label>
                                             <input
                                                 className="form-control"
                                                 type="text"
