@@ -9,6 +9,7 @@ import HomePage from '../containers/HomePage/HomePage';
 import MainCatPage from '../containers/MainCatPage/MainCatPage';
 import SubCatPage from '../containers/SubCatPage/SubCatPage';
 import ProductPage from '../containers/ProductPage/ProductPage';
+import Profile from '../containers/ProfilePage/ProfilePage';
 
 import './Home.scss';
 
@@ -22,6 +23,7 @@ class Home extends Component {
                         <Route path="/main-cat-page/:id" component={MainCatPage} />
                         <Route path="/sub-cat-page/:id" component={SubCatPage} />
                         <Route path="/product-page/:id" component={ProductPage} />
+                        <Route path="/profile-update" component={Profile} />
                         <Route exact path="" component={HomePage} />
                     </Switch>
                 </div>

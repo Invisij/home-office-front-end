@@ -26,7 +26,7 @@ class UserPopper extends Component {
                             </div>
                         )}
                         <div className="user-popper-item">
-                            <Link to={`/user-info-page/${userInfo.id}`} className="user-popper-link">
+                            <Link to={`/profile-update`} className="user-popper-link">
                                 Thông tin tài khoản
                             </Link>
                         </div>
